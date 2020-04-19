@@ -1,6 +1,7 @@
 import 'package:attendance_app/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/shared/constants.dart';
+import 'package:attendance_app/shared/registration_fields.dart';
 import 'package:attendance_app/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
@@ -21,88 +22,138 @@ class _SignInState extends State<SignIn> {
   String error = '';
   bool loading = false;
 
-  String _validateEmail(String value) {
-    if (value.isEmpty) {
-      return 'Email is required.';
-    }
-    final RegExp nameExp = new RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-    if (!nameExp.hasMatch(value)) {
-      return 'Please enter a valid email.';
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.lightBlue[300],
-            appBar: AppBar(
-              backgroundColor: Colors.lightBlue[700],
-              elevation: 0.0,
-              title: Text('Sign In'),
-              actions: <Widget>[
-                FlatButton.icon(
-                  icon: Icon(Icons.person_add),
-                  label: Text('Register'),
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                )
-              ],
+            backgroundColor: Colors.cyan[900],
+            body: SingleChildScrollView(
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.cyan, Colors.cyan[900]], // whitish to gray
+                    tileMode: TileMode.mirror,
+                  )),
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(height: 50),
+                            Text.rich(TextSpan(
+                                text: 'Attendance Management System',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: Colors.white))),
+                            SizedBox(height: 30),
+                            TextFormField(
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: 'Email'),
+                                validator: validateEmail,
+                                onChanged: (val) {
+                                  setState(() => email = val);
+                                }),
+                            SizedBox(height: 10.0),
+                            TextFormField(
+                                keyboardType: TextInputType.visiblePassword,
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: 'Password'),
+                                validator: (val) => val.length < 6
+                                    ? 'Enter a password 6+ characters long'
+                                    : null,
+                                obscureText: true,
+                                onChanged: (val) {
+                                  setState(() => password = val);
+                                }),
+                            SizedBox(height: 20),
+                            RaisedButton(
+                                elevation: 8,
+                                padding: EdgeInsets.fromLTRB(35, 15, 35, 15),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: Colors.cyan,
+                                child: Text('Sign In',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                                onPressed: () async {
+                                  if (_formKey.currentState.validate()) {
+                                    setState(() => loading = true);
+                                    dynamic result = await _authService
+                                        .signInWithEmailAndPassword(
+                                            email, password);
+                                    if (result == null) {
+                                      setState(() {
+                                        error = 'Could Not Sign In';
+                                        loading = false;
+                                      });
+                                    }
+                                  }
+                                }),
+                            SizedBox(height: 10),
+                            Text(error,
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12)),
+                            Divider(
+                              color: Colors.white,
+                              height: 20,
+                            ),
+                            Text('or Select an option to Register',
+                                style: TextStyle(color: Colors.white)),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    child: CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage: AssetImage(
+                                        'assets/images/business_user.png',
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      widget.toggleView();
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    child: CircleAvatar(
+                                      radius: 25,
+                                      child: Text('Google'),
+                                      backgroundColor: Colors.transparent,
+                                      // backgroundImage: AssetImage(
+                                      //     'assets/images/business_user.png'),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    child: CircleAvatar(
+                                      radius: 25,
+                                      child: Text('FaceBook'),
+                                      backgroundColor: Colors.transparent,
+                                      // backgroundImage: AssetImage(
+                                      //     'assets/images/business_user.png'),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ]))),
             ),
-            body: Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-                child: Form(
-                    key: _formKey,
-                    child: Column(children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          decoration:
-                              textInputDecoration.copyWith(hintText: 'Email'),
-                          validator: _validateEmail,
-                          onChanged: (val) {
-                            setState(() => email = val);
-                          }),
-                      SizedBox(height: 10.0),
-                      TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Password'),
-                          validator: (val) => val.length < 6
-                              ? 'Enter a password 6+ characters long'
-                              : null,
-                          obscureText: true,
-                          onChanged: (val) {
-                            setState(() => password = val);
-                          }),
-                      SizedBox(height: 10),
-                      RaisedButton(
-                          color: Colors.purple,
-                          child: Text('Sign In',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              setState(() => loading = true);
-                              dynamic result = await _authService
-                                  .signInWithEmailAndPassword(email, password);
-                              if (result == null) {
-                                setState(() {
-                                  error = 'Could Not Sign In';
-                                  loading = false;
-                                });
-                              }
-                            }
-                          }),
-                      SizedBox(height: 10),
-                      Text(error,
-                          style: TextStyle(color: Colors.red, fontSize: 12))
-                    ]))),
           );
   }
 }
