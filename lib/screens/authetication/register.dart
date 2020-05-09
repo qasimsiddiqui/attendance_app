@@ -1,5 +1,6 @@
 import 'package:attendance_app/screens/authetication/instructor_register.dart';
 import 'package:attendance_app/screens/authetication/student_register.dart';
+import 'package:attendance_app/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 enum UserRole { instructor, student }
@@ -17,43 +18,89 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue[300],
-      appBar: AppBar(
-        backgroundColor: Colors.lightBlue[700],
-        elevation: 0.0,
-        title: Text('Register to app'),
-        centerTitle: true,
-        actions: <Widget>[
-          FlatButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Sign In'),
-            onPressed: () {
-              widget.toggleView();
-            },
-          )
-        ],
-      ),
-      body: Center(
-        child: Container(
+      body: Container(
+        decoration: backgroundDecoration,
+        child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
-                  child: Text('Student'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StudentRegisterPage()),
-                    );
-                  }),
-              RaisedButton(
-                  child: Text('Instructor'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InstructorRegisterPage()),
-                    );
-                  })
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  GestureDetector(
+                    child: Container(
+                      height: 160,
+                      width: 160,
+                      decoration: BoxDecoration(
+                          color: Colors.cyan,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.red)),
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/user.png',
+                            width: MediaQuery.of(context).size.width / 3,
+                          ),
+                          Text(
+                            'Student',
+                            style: TextStyle(fontSize: 15),
+                          )
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StudentRegisterPage()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      height: 160,
+                      width: 160,
+                      decoration: BoxDecoration(
+                          color: Colors.cyan,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.red)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/business_user.png',
+                          ),
+                          Text('Instructor')
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InstructorRegisterPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Already Registered?'),
+                  FlatButton(
+                      color: Colors.red,
+                      onPressed: () {
+                        widget.toggleView();
+                      },
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                            color: Colors.white, fontStyle: FontStyle.italic),
+                      ))
+                ],
+              )
             ],
           ),
         ),

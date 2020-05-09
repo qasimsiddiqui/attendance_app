@@ -1,10 +1,13 @@
 import 'package:attendance_app/screens/authetication/authenticate.dart';
 import 'package:attendance_app/screens/home/home.dart';
 import 'package:attendance_app/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:attendance_app/models/user.dart';
 
+// This wrapper makes use of auth stream to determine whether the
+// Home screen should be displayed or the SignIn/Register screeen
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

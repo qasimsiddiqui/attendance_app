@@ -16,4 +16,10 @@ class Instructor {
         courses = snapshot['courses'].map<CourseNameAndID>((course) {
           return CourseNameAndID.fromMap(course);
         }).toList();
+
+  Instructor.initialData()
+      : name = '',
+        email = '',
+        number = '',
+        courses = [];
 }

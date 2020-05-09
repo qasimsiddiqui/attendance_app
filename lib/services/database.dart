@@ -15,6 +15,20 @@ class DatabaseService {
   final CollectionReference _studentCollection =
       Firestore.instance.collection('students');
 
+  // bool determineUser(UserUID userUID) {
+  //   Future<bool> instruct = _instructorCollection.document(uid).get().then((doc){
+  //     if(doc.exists){
+  //       return true;
+  //     }
+  //     else{
+  //       return false;
+  //     }
+  //   });
+  //   if(instruct != null){
+
+  //   }
+  // }
+
   // Future<bool> determineUser(User user) async {
   //   bool isStudent = false;
   //   try {
@@ -55,36 +69,34 @@ class DatabaseService {
   //   });
   // }
 
-  Future<User> get getUserData async {
+  //     .snapshots()
+  //     .map((DocumentSnapshot snapshot) {
+  //   return User.fromSnapshot(snapshot, false);
+  // });
+  Future<User> get getUserData {
     User user;
-    try {
-      await _instructorCollection.document(uid).get().then((doc) {
-        if (doc.exists) {
-          user = new User(
-              name: doc.data['name'],
-              uid: uid,
-              email: doc.data['email'],
-              number: doc.data['number'],
-              isStudent: false);
-        } else {
-          _studentCollection.document(uid).get().then((doc) {
-            if (doc.exists) {
-              user = new User(
-                  name: doc.data['name'],
-                  uid: uid,
-                  email: doc.data['email'],
-                  number: doc.data['number'],
-                  isStudent: true);
-            } else {
-              user = null;
-            }
-          });
-        }
-      });
+    return _instructorCollection
+        .document(uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      if (snapshot.exists) {
+        user = new User.fromSnapshot(snapshot, false, uid);
+      } else {
+        _studentCollection
+            .document(uid)
+            .get()
+            .then((DocumentSnapshot snapshot) {
+          if (snapshot.exists) {
+            user = new User.fromSnapshot(snapshot, true, uid);
+          } else {
+            user = null;
+          }
+        });
+      }
       return user;
-    } catch (e) {
-      return null;
-    }
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -156,7 +168,6 @@ class DatabaseService {
         .document(uid)
         .snapshots()
         .map((DocumentSnapshot snapshot) {
-      print(snapshot.data.toString());
       return Instructor.fromSnapshot(snapshot);
     });
   }

@@ -29,6 +29,14 @@ class CourseNameAndID {
       : name = map['name'],
         id = map['id'];
 
+  String get courseName {
+    return name;
+  }
+
+  String get courseID {
+    return id;
+  }
+
   set courseName(String _cName) {
     name = _cName;
   }

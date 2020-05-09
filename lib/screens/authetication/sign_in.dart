@@ -27,17 +27,10 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.cyan[900],
             body: SingleChildScrollView(
               child: Container(
                   height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Colors.cyan, Colors.cyan[900]], // whitish to gray
-                    tileMode: TileMode.mirror,
-                  )),
+                  decoration: backgroundDecoration,
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
                   child: Form(
                       key: _formKey,
@@ -47,10 +40,12 @@ class _SignInState extends State<SignIn> {
                             SizedBox(height: 50),
                             Text.rich(TextSpan(
                                 text: 'Attendance Management System',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: Colors.white))),
+                                style: Theme.of(context).textTheme.display1
+                                //  TextStyle(
+                                //     fontWeight: FontWeight.bold,
+                                //     fontSize: 30,
+                                //     color: Colors.white)
+                                )),
                             SizedBox(height: 30),
                             TextFormField(
                                 keyboardType: TextInputType.emailAddress,

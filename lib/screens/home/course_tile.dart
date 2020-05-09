@@ -1,6 +1,9 @@
 import 'package:attendance_app/models/course.dart';
+import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/course_details/course_details.dart';
+import 'package:attendance_app/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CourseTile extends StatelessWidget {
   final CourseNameAndID course;
@@ -9,6 +12,8 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
@@ -18,10 +23,13 @@ class CourseTile extends StatelessWidget {
             child: Icon(Icons.dvr),
             radius: 25.0,
           ),
-          title: Text(course.name + '(' + course.id + ')'),
+          title: Text(course.name + "(" + course.id + ")"),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CourseDetails()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Provider.value(
+                        value: user, child: CourseDetails(course: course))));
           },
         ),
       ),

@@ -4,9 +4,9 @@ import 'package:attendance_app/models/user.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetails extends StatelessWidget {
-  // final CourseNameAndID course;
+  final CourseNameAndID course;
 
-  // CourseDetails({this.course});
+  CourseDetails({this.course});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class CourseDetails extends StatelessWidget {
       )),
       body: Column(
         children: <Widget>[
-          ListTile(title: Text('Name : ' + user.name)),
-          ListTile(title: Text('ID : ' + user.uid)),
+          ListTile(title: Text('Name : ${course.name}')),
+          ListTile(title: Text('ID : ${course.id}')),
         ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {}),

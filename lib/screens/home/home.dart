@@ -15,31 +15,39 @@ class Home extends StatelessWidget {
     final userUID = Provider.of<UserUID>(context);
     final user = Provider.of<User>(context);
 
+    print(userUID.uid);
+
     return StreamProvider<Instructor>.value(
+        initialData: Instructor.initialData(),
         value: DatabaseService(uid: userUID.uid).instructorData,
         child: Scaffold(
-          backgroundColor: Colors.lightBlue,
-          appBar: AppBar(
-            title: Text('Home Page'),
-            backgroundColor: Colors.blue[600],
-            elevation: 0.0,
-            actions: <Widget>[
-              FlatButton.icon(
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                label: Text(
-                  'Logout',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  await _authService.signOut();
-                },
+          body: NestedScrollView(
+            headerSliverBuilder: (context, boo) => [
+              SliverAppBar(
+                pinned: true,
+                title: Text('Home Page'),
+                elevation: 0.0,
+                actions: <Widget>[
+                  FlatButton.icon(
+                    icon: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      await _authService.signOut();
+                    },
+                  )
+                ],
+                expandedHeight: 150,
+                backgroundColor: Colors.red,
               )
             ],
+            body: CourseList(),
           ),
-          body: CourseList(),
           drawer: Drawer(
               child: Column(
             children: <Widget>[
@@ -57,12 +65,10 @@ class Home extends StatelessWidget {
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddCourse(
-                          user: user,
-                        )),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Provider<User>.value(
+                          value: user, child: AddCourse())));
             },
           ),
         ));

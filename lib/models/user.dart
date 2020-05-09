@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserUID {
   final String uid;
 
@@ -12,6 +14,11 @@ class User {
   bool isStudent;
 
   User({this.name, this.email, this.number, this.isStudent, this.uid});
+
+  String get getUserName {
+    return name;
+  }
+
   set userName(String n) {
     name = n;
   }
@@ -27,4 +34,11 @@ class User {
   set userIsStudent(bool n) {
     isStudent = n;
   }
+
+  User.fromSnapshot(DocumentSnapshot snapshot, bool isStd, String userUID)
+      : name = snapshot['name'],
+        uid = userUID,
+        email = snapshot['email'],
+        number = snapshot['number'],
+        isStudent = isStd;
 }

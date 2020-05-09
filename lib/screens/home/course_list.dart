@@ -1,4 +1,6 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/instructor.dart';
+import 'package:attendance_app/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:attendance_app/screens/home/course_tile.dart';
@@ -12,12 +14,15 @@ class _CourseListState extends State<CourseList> {
   @override
   Widget build(BuildContext context) {
     final instructor = Provider.of<Instructor>(context);
+    final List<CourseNameAndID> courses = instructor.courses ?? [];
 
-    return ListView.builder(
-      itemCount: instructor.courses.length ?? 1,
-      itemBuilder: (context, index) {
-        return CourseTile(course: instructor.courses[index]);
-      },
-    );
+    return instructor.courses == null
+        ? Loading()
+        : ListView.builder(
+            itemCount: courses.length,
+            itemBuilder: (context, index) {
+              return CourseTile(course: courses[index]);
+            },
+          );
   }
 }
