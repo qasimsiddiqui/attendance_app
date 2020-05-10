@@ -1,4 +1,5 @@
 import 'package:attendance_app/models/course.dart';
+import 'package:attendance_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,17 @@ class CourseDetails extends StatelessWidget {
           ListTile(title: Text('ID : ${course.id}')),
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Add Lecture'),
+        icon: Icon(Icons.add),
+        onPressed: () {
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => Provider<User>.value(
+          //             value: user, child: AddCourse())));
+        },
+      ),
     );
   }
 }

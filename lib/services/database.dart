@@ -1,17 +1,20 @@
 import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/student.dart';
+import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/models/instructor.dart';
 import 'package:attendance_app/models/user.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  final String uid;
   DatabaseService({this.uid});
+
+  final String uid;
 
   //collection reference
   final CollectionReference _instructorCollection =
       Firestore.instance.collection('instructors');
+
   final CollectionReference _studentCollection =
       Firestore.instance.collection('students');
 
@@ -257,4 +260,24 @@ class DatabaseService {
         .snapshots()
         .map(_courseListFromSnapshot);
   }
+
+  //Course list from snapshot
+  // List<Lecture> _lectureListFromSnapshot(QuerySnapshot querySnapshot) {
+  //   return querySnapshot.documents.map((doc) {
+  //     return Lecture(
+  //         id: doc.data['id'] ?? '',
+  //         name: doc.data['name'] ?? '',
+  //         session: doc.data['session'] ?? '',
+  //         code: doc.data['code'] ?? '');
+  //   }).toList();
+  // }
+
+  //get courses stream
+  // Stream<List<Lecture>> get getLectures(String sd) {
+  //   return _instructorCollection
+  //       .document(uid)
+  //       .collection('courses')
+  //       .snapshots()
+  //       .map(_lectureListFromSnapshot);
+  // }
 }
