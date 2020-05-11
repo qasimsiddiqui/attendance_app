@@ -7,9 +7,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  DatabaseService({this.uid});
+  DatabaseService({this.courseID, this.uid});
 
   final String uid;
+  final String courseID;
 
   //collection reference
   final CollectionReference _instructorCollection =
@@ -262,22 +263,20 @@ class DatabaseService {
   }
 
   //Course list from snapshot
-  // List<Lecture> _lectureListFromSnapshot(QuerySnapshot querySnapshot) {
-  //   return querySnapshot.documents.map((doc) {
-  //     return Lecture(
-  //         id: doc.data['id'] ?? '',
-  //         name: doc.data['name'] ?? '',
-  //         session: doc.data['session'] ?? '',
-  //         code: doc.data['code'] ?? '');
-  //   }).toList();
-  // }
+  List<Lecture> _lectureListFromSnapshot(QuerySnapshot querySnapshot) {
+    return querySnapshot.documents.map((DocumentSnapshot snapshot) {
+      return Lecture.fromSnapshot(snapshot);
+    }).toList();
+  }
 
   //get courses stream
-  // Stream<List<Lecture>> get getLectures(String sd) {
-  //   return _instructorCollection
-  //       .document(uid)
-  //       .collection('courses')
-  //       .snapshots()
-  //       .map(_lectureListFromSnapshot);
-  // }
+  Stream<List<Lecture>> get getLectures {
+    return _instructorCollection
+        .document(uid)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .snapshots()
+        .map(_lectureListFromSnapshot);
+  }
 }

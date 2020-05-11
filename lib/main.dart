@@ -6,11 +6,15 @@ import 'package:attendance_app/services/auth.dart';
 import 'package:attendance_app/shared/constants.dart';
 
 void main() {
+  //Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(providers: <SingleChildCloneableWidget>[
     // StreamProvider is created here which manages the Auth of the user if the
     // auth status changes the value is sent down the widget tree from here
-    StreamProvider<UserUID>.value(value: AuthService().userChangeStream)
+    StreamProvider<UserUID>(
+      create: (_) => AuthService().userChangeStream,
+      initialData: null,
+    )
   ], child: MyApp()));
 }
 

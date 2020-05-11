@@ -14,14 +14,13 @@ class AuthService {
     // if (user != null) {
     //   //return User(uid: user.uid);
     //   User userInfo;
-    //   DatabaseService(uid: user.uid).determineUser().then((User result) {
+    //   yield* await DatabaseService(uid: user.uid).determineUser().then((User result) {
     //     userInfo = result;
+    //     return userInfo;
     //   }).catchError((e) {
     //     print('Error = ' + e.toString());
     //     return null;
     //   });
-    //   print('userInfo = ' + userInfo.toString());
-    //   return userInfo;
     // } else {
     //   return null;
     // }

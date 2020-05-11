@@ -1,4 +1,6 @@
 import 'package:attendance_app/models/course.dart';
+import 'package:attendance_app/models/lecture.dart';
+import 'package:attendance_app/screens/course_details/lecture_list.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/user.dart';
@@ -13,38 +15,36 @@ class CourseDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Course Details'),
-      ),
-      drawer: Drawer(
-          child: Column(
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(user.name ?? ''),
-            accountEmail: Text(user.email ?? ''),
-          ),
-          ListTile(title: Text(user.uid ?? '')),
-          ListTile(title: Text(user.isStudent ? 'Student' : 'Instructor')),
-          ListTile(title: Text(user.number ?? ''))
-        ],
-      )),
-      body: Column(
-        children: <Widget>[
-          ListTile(title: Text('Name : ${course.name}')),
-          ListTile(title: Text('ID : ${course.id}')),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Add Lecture'),
-        icon: Icon(Icons.add),
-        onPressed: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => Provider<User>.value(
-          //             value: user, child: AddCourse())));
-        },
+    return StreamProvider<List<Lecture>>.value(
+      value: DatabaseService(uid: user.uid, courseID: course.id).getLectures,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Course Details'),
+        ),
+        drawer: Drawer(
+            child: Column(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text(user.name ?? ''),
+              accountEmail: Text(user.email ?? ''),
+            ),
+            ListTile(title: Text(user.uid ?? '')),
+            ListTile(title: Text(user.isStudent ? 'Student' : 'Instructor')),
+            ListTile(title: Text(user.number ?? ''))
+          ],
+        )),
+        body: LectureList(),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text('Add Lecture'),
+          icon: Icon(Icons.add),
+          onPressed: () {
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => Provider<User>.value(
+            //             value: user, child: AddCourse())));
+          },
+        ),
       ),
     );
   }

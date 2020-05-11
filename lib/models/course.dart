@@ -17,6 +17,16 @@ class Course {
       this.noOfLectures,
       this.totalCreditHours,
       this.creditHoursDone});
+
+  Course.initialData()
+      : id = '',
+        instructorUID = '',
+        name = '',
+        code = '',
+        session = '',
+        noOfLectures = 0,
+        totalCreditHours = 0,
+        creditHoursDone = 0;
 }
 
 class CourseNameAndID {
