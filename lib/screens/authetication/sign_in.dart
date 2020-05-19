@@ -40,7 +40,7 @@ class _SignInState extends State<SignIn> {
                             SizedBox(height: 50),
                             Text.rich(TextSpan(
                                 text: 'Attendance Management System',
-                                style: Theme.of(context).textTheme.display1
+                                style: Theme.of(context).textTheme.headline4
                                 //  TextStyle(
                                 //     fontWeight: FontWeight.bold,
                                 //     fontSize: 30,

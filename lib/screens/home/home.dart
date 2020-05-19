@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
     final userUID = Provider.of<UserUID>(context);
     final user = Provider.of<User>(context);
 
-    print(userUID.uid);
+    // print(userUID.uid);
 
     return StreamProvider<Instructor>.value(
         initialData: Instructor.initialData(),

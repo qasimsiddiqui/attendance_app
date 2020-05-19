@@ -35,9 +35,10 @@ class CourseNameAndID {
 
   CourseNameAndID(this.name, this.id);
 
+  //TODO set the code and id parameters of this func
   CourseNameAndID.fromMap(Map<dynamic, dynamic> map)
       : name = map['name'],
-        id = map['id'];
+        id = map['code'];
 
   String get courseName {
     return name;

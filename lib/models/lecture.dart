@@ -1,10 +1,13 @@
+import 'dart:wasm';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Lecture {
   int noOfPresentStudents;
   int creditHours;
-  DateTime dateTime;
-  double averageAttendance;
+  Timestamp dateTime;
+  //DateTime dateTime;
+  int averageAttendance;
   String attendanceCode;
 
   Lecture(
@@ -24,7 +27,7 @@ class Lecture {
   Lecture.initialData()
       : noOfPresentStudents = 0,
         creditHours = 0,
-        dateTime = DateTime.now(),
+        dateTime = Timestamp.now(),
         averageAttendance = 0,
         attendanceCode = '';
 }

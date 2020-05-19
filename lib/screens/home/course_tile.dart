@@ -1,7 +1,6 @@
 import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/course_details/course_details.dart';
-import 'package:attendance_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
