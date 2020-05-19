@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/user.dart';
 import 'package:flutter/material.dart';
 
 const textInputDecoration = InputDecoration(
@@ -37,3 +38,18 @@ const backgroundDecoration = BoxDecoration(
   ], // whitish to gray
   tileMode: TileMode.mirror,
 ));
+
+Drawer appDrawer(User user) {
+  return Drawer(
+      child: Column(
+    children: <Widget>[
+      UserAccountsDrawerHeader(
+        accountName: Text(user.name ?? ''),
+        accountEmail: Text(user.email ?? ''),
+      ),
+      ListTile(title: Text(user.uid ?? '')),
+      ListTile(title: Text(user.isStudent ? 'Student' : 'Instructor')),
+      ListTile(title: Text(user.number ?? ''))
+    ],
+  ));
+}

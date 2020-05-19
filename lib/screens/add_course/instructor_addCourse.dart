@@ -27,19 +27,7 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
     return loading
         ? Loading()
         : Scaffold(
-            drawer: Drawer(
-                child: Column(
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  accountName: Text(user.name ?? ''),
-                  accountEmail: Text(user.email ?? ''),
-                ),
-                ListTile(title: Text(user.uid ?? '')),
-                ListTile(
-                    title: Text(user.isStudent ? 'Student' : 'Instructor')),
-                ListTile(title: Text(user.number ?? ''))
-              ],
-            )),
+            drawer: appDrawer(user),
             backgroundColor: Colors.blue[200],
             appBar: AppBar(
               title: Text('Add Course'),

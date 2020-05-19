@@ -2,6 +2,7 @@ import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/screens/course_details/lecture_list.dart';
 import 'package:attendance_app/services/database.dart';
+import 'package:attendance_app/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:provider/provider.dart';
@@ -21,18 +22,7 @@ class CourseDetails extends StatelessWidget {
         appBar: AppBar(
           title: Text('Course Details'),
         ),
-        drawer: Drawer(
-            child: Column(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(user.name ?? ''),
-              accountEmail: Text(user.email ?? ''),
-            ),
-            ListTile(title: Text(user.uid ?? '')),
-            ListTile(title: Text(user.isStudent ? 'Student' : 'Instructor')),
-            ListTile(title: Text(user.number ?? ''))
-          ],
-        )),
+        drawer: appDrawer(user),
         body: LectureList(),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Add Lecture'),

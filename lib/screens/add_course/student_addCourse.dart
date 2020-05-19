@@ -19,12 +19,12 @@ class _StudentAddCourseState extends State<StudentAddCourse> {
 
   @override
   Widget build(BuildContext context) {
-    final userUID = Provider.of<UserUID>(context);
-    final DatabaseService _databaseService = DatabaseService(uid: userUID.uid);
+    final user = Provider.of<User>(context);
+    final DatabaseService _databaseService = DatabaseService(uid: user.uid);
     return loading
         ? Loading()
         : Scaffold(
-            drawer: Drawer(),
+            drawer: appDrawer(user),
             backgroundColor: Colors.blue[200],
             appBar: AppBar(
               title: Text('Add Course'),
