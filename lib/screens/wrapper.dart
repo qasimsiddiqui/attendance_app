@@ -1,7 +1,7 @@
 import 'package:attendance_app/screens/authetication/authenticate.dart';
 import 'package:attendance_app/screens/home/home.dart';
 import 'package:attendance_app/services/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:attendance_app/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:attendance_app/models/user.dart';
@@ -15,6 +15,8 @@ class Wrapper extends StatelessWidget {
 
     //returns either the authenticate or home Widget
     if (user == null) {
+      return Loading();
+    } else if (user.isSignedIn == false) {
       return Authenticate();
     } else {
       return FutureProvider<User>.value(

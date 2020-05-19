@@ -3,12 +3,11 @@ import 'package:attendance_app/screens/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:attendance_app/services/auth.dart';
-import 'package:attendance_app/shared/constants.dart';
 
 void main() {
   //Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MultiProvider(providers: <SingleChildCloneableWidget>[
+  runApp(MultiProvider(providers: [
     // StreamProvider is created here which manages the Auth of the user if the
     // auth status changes the value is sent down the widget tree from here
     StreamProvider<UserUID>(

@@ -8,9 +8,9 @@ class AuthService {
   //create user object based on a firebase user
   UserUID _userFromFirebaseUser(FirebaseUser user) {
     if (user != null)
-      return UserUID(uid: user.uid);
+      return UserUID(uid: user.uid, isSignedIn: true);
     else
-      return null;
+      return UserUID(uid: '', isSignedIn: false);
     // if (user != null) {
     //   //return User(uid: user.uid);
     //   User userInfo;

@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserUID {
   final String uid;
+  final bool isSignedIn;
 
-  UserUID({this.uid});
+  UserUID({this.uid, this.isSignedIn});
 }
 
 class User {
