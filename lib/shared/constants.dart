@@ -44,6 +44,17 @@ Drawer appDrawer(User user) {
       child: Column(
     children: <Widget>[
       UserAccountsDrawerHeader(
+        currentAccountPicture: CircleAvatar(
+            child: user.isStudent
+                ? Image.asset(
+                    'assets/images/user.png',
+                    width: 60,
+                  )
+                : Image.asset(
+                    'assets/images/business_user.png',
+                    width: 60,
+                  )),
+        decoration: backgroundDecoration,
         accountName: Text(user.name ?? ''),
         accountEmail: Text(user.email ?? ''),
       ),
