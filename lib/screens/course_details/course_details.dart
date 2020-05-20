@@ -8,7 +8,7 @@ import 'package:attendance_app/models/user.dart';
 import 'package:provider/provider.dart';
 
 class CourseDetails extends StatelessWidget {
-  final CourseNameAndID course;
+  final Course course;
 
   CourseDetails({this.course});
 

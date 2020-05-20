@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/instructor.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/add_course/add_course.dart';
@@ -18,9 +19,9 @@ class Home extends StatelessWidget {
 
     // print(userUID.uid);
 
-    return StreamProvider<Instructor>.value(
-        initialData: Instructor.initialData(),
-        value: DatabaseService(uid: userUID.uid).instructorData,
+    return StreamProvider<List<Course>>.value(
+        initialData: [],
+        value: DatabaseService(uid: userUID.uid).courses,
         child: Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (context, boo) => [
@@ -28,6 +29,11 @@ class Home extends StatelessWidget {
                 pinned: true,
                 title: Text('Home Page'),
                 elevation: 0.0,
+                expandedHeight: 150,
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(30))),
                 actions: <Widget>[
                   FlatButton.icon(
                     icon: Icon(
@@ -43,8 +49,7 @@ class Home extends StatelessWidget {
                     },
                   )
                 ],
-                expandedHeight: 150,
-                backgroundColor: Colors.red,
+                //flexibleSpace: FlexibleSpaceBar(title: Text('')),
               )
             ],
             body: CourseList(),

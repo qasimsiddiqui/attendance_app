@@ -13,10 +13,10 @@ class CourseList extends StatefulWidget {
 class _CourseListState extends State<CourseList> {
   @override
   Widget build(BuildContext context) {
-    final instructor = Provider.of<Instructor>(context);
-    final List<CourseNameAndID> courses = instructor.courses ?? [];
+    final courses = Provider.of<List<Course>>(context);
+    //final List<CourseNameAndID> courses = instructor.courses ?? [];
 
-    return instructor.courses == null
+    return courses == null
         ? Loading()
         : ListView.builder(
             itemCount: courses.length,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CourseTile extends StatelessWidget {
-  final CourseNameAndID course;
+  final Course course;
 
   CourseTile({this.course});
 
@@ -13,24 +13,22 @@ class CourseTile extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
 
-    return Padding(
-      padding: EdgeInsets.only(top: 8.0),
-      child: Card(
-        margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-        child: ListTile(
-          leading: CircleAvatar(
-            child: Icon(Icons.dvr),
-            radius: 25.0,
-          ),
-          title: Text(course.name + "(" + course.id + ")"),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Provider.value(
-                        value: user, child: CourseDetails(course: course))));
-          },
+    return Card(
+      margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),
+      child: ListTile(
+        leading: CircleAvatar(
+          child: Icon(Icons.dvr),
+          radius: 25.0,
         ),
+        title: Text(course.name),
+        subtitle: Text(" ( " + course.id + " )"),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Provider.value(
+                      value: user, child: CourseDetails(course: course))));
+        },
       ),
     );
   }
