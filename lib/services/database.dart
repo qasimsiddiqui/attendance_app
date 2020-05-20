@@ -113,24 +113,21 @@ class DatabaseService {
 
   /// TODO complete Student mathods
 
-  Future addStudentCourse(String id) async {
+  Future addStudentCourse(String courseID) async {
     // String code = await addStudentCourseData(name, id, session);
 
-    // return await _instructorCollection
-    //     .document(uid)
-    //     .updateData({
-    //       'courses': FieldValue.arrayUnion([
-    //         {'name': name, 'id': id, 'code': code, 'session': session}
-    //       ])
-    //     })
-    //     .then((doc) {
-    //       print("DOC saved");
-    //     })
-    //     .timeout(Duration(seconds: 10))
-    //     .catchError((error) {
-    //       print("Error on doc save");
-    //       print(error);
-    //     });
+    String courseExist = await _instructorCollection
+        .where("courses", arrayContains: courseID)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.map((e) {
+        return e.documentID;
+      });
+    }).catchError((error) {
+      print("Error: $error");
+    });
+
+    print(courseExist);
   }
 
   Future updateStudentData(
