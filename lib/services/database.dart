@@ -116,27 +116,38 @@ class DatabaseService {
   Future addStudentCourse(String courseID) async {
     // String code = await addStudentCourseData(name, id, session);
 
-    String courseExist = await _instructorCollection
+    //query the course ID in instructors collection to check if course exists
+    QuerySnapshot courseExist = await _instructorCollection
         .where("courses", arrayContains: courseID)
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      snapshot.documents.map((e) {
-        return e.documentID;
-      });
-    }).catchError((error) {
-      print("Error: $error");
-    });
+        .getDocuments();
 
-    print(courseExist);
+    //ID of Instructor whose course it is
+    List<String> instructorUID = courseExist.documents.map((e) => e.documentID);
+
+    //checks to see if only one course is found
+    if (instructorUID.isEmpty) {
+      return "Course does not Exist";
+    } else if (instructorUID.length != 1) {
+      return "More than one courses found";
+    } else {
+      await _instructorCollection
+          .document(instructorUID[0])
+          .collection('courses')
+          .document(courseID)
+          .collection('registered_students')
+          .document(uid)
+          .setData({'no_of_attended_lec': 0, 'absents': 0});
+    }
   }
 
   Future updateStudentData(
       String name, String regNo, String number, String email) async {
     return await _studentCollection.document(uid).setData({
-      'registration No': regNo,
+      'registration_No': regNo,
       'name': name,
       'number': number,
       'email': email,
+      'courses': []
     });
   }
 

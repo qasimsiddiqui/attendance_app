@@ -59,6 +59,7 @@ class _StudentAddCourseState extends State<StudentAddCourse> {
                               await _databaseService.addStudentCourse(courseID);
                           if (result == null) {
                             setState(() => loading = false);
+                            Navigator.pop(context);
                           } else {
                             print(result.toString());
                           }
