@@ -20,8 +20,7 @@ class Wrapper extends StatelessWidget {
       return Authenticate();
     } else {
       return FutureProvider<User>.value(
-        initialData: User(
-            uid: user.uid, name: '', number: '', email: '', isStudent: false),
+        initialData: User.initialData(user.uid),
         value: DatabaseService(uid: user.uid).getUserData,
         child: Home(),
       );

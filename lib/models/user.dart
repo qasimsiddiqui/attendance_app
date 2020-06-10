@@ -16,25 +16,12 @@ class User {
 
   User({this.name, this.email, this.number, this.isStudent, this.uid});
 
-  String get getUserName {
-    return name;
-  }
-
-  set userName(String n) {
-    name = n;
-  }
-
-  set userEmail(String n) {
-    email = n;
-  }
-
-  set userNumber(String n) {
-    number = n;
-  }
-
-  set userIsStudent(bool n) {
-    isStudent = n;
-  }
+  User.initialData(String userID)
+      : uid = userID,
+        name = "",
+        email = "",
+        number = "",
+        isStudent = false;
 
   User.fromSnapshot(DocumentSnapshot snapshot, bool isStd, String userUID)
       : name = snapshot['name'],
