@@ -15,7 +15,7 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
 
   //Course _course;
   String name = '';
-  String courseID = '';
+  String courseCode = '';
   String session = '';
 
   bool loading = false;
@@ -55,9 +55,9 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration: textInputDecoration.copyWith(
-                          labelText: 'Enter a Course ID'),
+                          labelText: 'Enter a Course Code'),
                       onChanged: (val) {
-                        setState(() => courseID = val);
+                        setState(() => courseCode = val);
                       },
                     ),
                     SizedBox(height: 20.0),
@@ -81,7 +81,7 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
                           setState(() => loading = true);
 
                           dynamic result = await _databaseService
-                              .addInstructorCourse(name, courseID, session);
+                              .addInstructorCourse(name, courseCode, session);
                           if (result == null) {
                             setState(() => loading = false);
                           } else {

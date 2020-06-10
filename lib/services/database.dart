@@ -77,30 +77,28 @@ class DatabaseService {
   //     .map((DocumentSnapshot snapshot) {
   //   return User.fromSnapshot(snapshot, false);
   // });
-  Future<User> get getUserData {
+  Future<User> get getUserData async {
     User user;
-    return _instructorCollection
-        .document(uid)
-        .get()
-        .then((DocumentSnapshot snapshot) {
-      if (snapshot.exists) {
-        user = new User.fromSnapshot(snapshot, false, uid);
+    try {
+      DocumentSnapshot instructorSnapshot =
+          await _instructorCollection.document(uid).get();
+
+      if (instructorSnapshot.exists) {
+        user = new User.fromSnapshot(instructorSnapshot, false, uid);
       } else {
-        _studentCollection
-            .document(uid)
-            .get()
-            .then((DocumentSnapshot snapshot) {
-          if (snapshot.exists) {
-            user = new User.fromSnapshot(snapshot, true, uid);
-          } else {
-            user = null;
-          }
-        });
+        DocumentSnapshot studentSnapshot =
+            await _studentCollection.document(uid).get();
+
+        if (studentSnapshot.exists) {
+          user = new User.fromSnapshot(studentSnapshot, true, uid);
+        } else {
+          user = new User.initialData(uid);
+        }
       }
       return user;
-    }).catchError((e) {
+    } catch (e) {
       print(e.toString());
-    });
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -122,7 +120,8 @@ class DatabaseService {
         .getDocuments();
 
     //ID of Instructor whose course it is
-    List<String> instructorUID = courseExist.documents.map((e) => e.documentID);
+    List<String> instructorUID =
+        courseExist.documents.map((e) => e.documentID).toList();
 
     //checks to see if only one course is found
     if (instructorUID.isEmpty) {
@@ -137,6 +136,12 @@ class DatabaseService {
           .collection('registered_students')
           .document(uid)
           .setData({'no_of_attended_lec': 0, 'absents': 0});
+
+      await _studentCollection.document(uid).updateData({
+        'courses': FieldValue.arrayUnion([
+          {'instructor_uid': instructorUID[0], 'course_id': courseID}
+        ])
+      });
     }
   }
 
@@ -189,15 +194,14 @@ class DatabaseService {
         {'name': name, 'number': number, 'email': email, 'courses': []});
   }
 
-  Future addInstructorCourse(String name, String id, String session) async {
-    String code = await addInstructorCourseData(name, id, session);
+  Future addInstructorCourse(
+      String name, String courseCode, String session) async {
+    String id = await addInstructorCourseData(name, courseCode, session);
 
     return await _instructorCollection
         .document(uid)
         .updateData({
-          'courses': FieldValue.arrayUnion([
-            {'name': name, 'id': id, 'code': code, 'session': session}
-          ])
+          'courses': FieldValue.arrayUnion([id])
         })
         .then((doc) {
           print("DOC saved");
@@ -233,8 +237,9 @@ class DatabaseService {
   ///////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  Future addInstructorCourseData(String name, String id, String session) async {
-    String code = _instructorCollection
+  Future addInstructorCourseData(
+      String name, String courseCode, String session) async {
+    String id = _instructorCollection
         .document(uid)
         .collection('courses')
         .document()
@@ -243,11 +248,15 @@ class DatabaseService {
     await _instructorCollection
         .document(uid)
         .collection('courses')
-        .document(code)
-        .setData(
-            {'name': name, 'code': code, 'session': session, 'id': id ?? ''});
+        .document(id)
+        .setData({
+      'name': name,
+      'course_code': courseCode,
+      'session': session,
+      'id': id ?? ''
+    });
 
-    return code;
+    return id;
   }
 
   //Course list from snapshot
