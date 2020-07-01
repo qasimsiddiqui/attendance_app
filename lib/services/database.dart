@@ -262,21 +262,52 @@ class DatabaseService {
   //Course list from snapshot
   List<Course> _courseListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.documents.map((doc) {
-      return Course(
-          id: doc.data['id'] ?? '',
-          name: doc.data['name'] ?? '',
-          session: doc.data['session'] ?? '',
-          code: doc.data['code'] ?? '');
+      return Course.fromSnapshot(doc);
     }).toList();
   }
 
-  //get courses stream
-  Stream<List<Course>> get courses {
+  Stream<List<Course>> _getStudentCourses() async* {
+    List<Course> courseList = new List();
+
+    DocumentSnapshot stdDoc = await _studentCollection.document(uid).get();
+    Student _student = new Student.fromSnapshot(stdDoc);
+
+    if (_student.courses.length == 0) {
+      return; //TODO add appropriate return type
+    } else {
+      int len = _student.courses.length - 1;
+      while (len >= 0) {
+        DocumentSnapshot snapshot = await _instructorCollection
+            .document(_student.courses[len].instructorUID)
+            .collection('courses')
+            .document(_student.courses[len].courseID)
+            .get();
+        //print(snapshot.data);
+        Course course = new Course.fromSnapshot(snapshot);
+        courseList.add(course);
+
+        print(courseList.length);
+        len--;
+      }
+      yield courseList;
+    }
+  }
+
+  Stream<List<Course>> _getInstructorCourses() {
     return _instructorCollection
         .document(uid)
         .collection('courses')
         .snapshots()
         .map(_courseListFromSnapshot);
+  }
+
+  //get courses stream
+  Stream<List<Course>> getCourses(bool isStudent) {
+    if (isStudent) {
+      return _getStudentCourses();
+    } else {
+      return _getInstructorCourses();
+    }
   }
 
   //Course list from snapshot
@@ -297,3 +328,6 @@ class DatabaseService {
         .map(_lectureListFromSnapshot);
   }
 }
+
+//GlSp6kW9Qn1pz82Ct9gR
+//RF3DfFlAbIhAP69P4g97

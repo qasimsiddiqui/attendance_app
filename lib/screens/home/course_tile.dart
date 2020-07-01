@@ -12,6 +12,7 @@ class CourseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    print(course.toString());
 
     return Card(
       margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 6.0),

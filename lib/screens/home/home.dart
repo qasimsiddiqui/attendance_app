@@ -1,5 +1,4 @@
 import 'package:attendance_app/models/course.dart';
-import 'package:attendance_app/models/instructor.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/add_course/add_course.dart';
 import 'package:attendance_app/services/auth.dart';
@@ -21,7 +20,7 @@ class Home extends StatelessWidget {
 
     return StreamProvider<List<Course>>.value(
         initialData: [],
-        value: DatabaseService(uid: userUID.uid).courses,
+        value: DatabaseService(uid: userUID.uid).getCourses(user.isStudent),
         child: Scaffold(
           body: NestedScrollView(
             headerSliverBuilder: (context, boo) => [
