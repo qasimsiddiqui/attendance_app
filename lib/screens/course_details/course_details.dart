@@ -19,11 +19,36 @@ class CourseDetails extends StatelessWidget {
     return StreamProvider<List<Lecture>>.value(
       value: DatabaseService(uid: user.uid, courseID: course.id).getLectures,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Course Details'),
-        ),
         drawer: appDrawer(user),
-        body: LectureList(),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, boo) => [
+            SliverAppBar(
+              pinned: true,
+              title: Text('Course Details'),
+              elevation: 0.0,
+              expandedHeight: 150,
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(30))),
+              //flexibleSpace: FlexibleSpaceBar(title: Text('')),
+            ),
+            Container(
+                child: Column(
+              children: <Widget>[
+                Text('Course Name: ${course.name}'),
+                Text('Course ID: ${course.id}'),
+                Text('Course Code: ${course.courseCode}'),
+                Text('Total Credit Hours: ${course.totalCreditHours}'),
+                Text('Credit Hours Done: ${course.creditHoursDone}'),
+                Text('Instructor UID: ${course.instructorUID}'),
+                Text('No of Lectures: ${course.noOfLectures}'),
+                Text('Session: ${course.session}'),
+              ],
+            ))
+          ],
+          body: LectureList(),
+        ),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Add Lecture'),
           icon: Icon(Icons.add),
@@ -32,7 +57,7 @@ class CourseDetails extends StatelessWidget {
             //     context,
             //     MaterialPageRoute(
             //         builder: (context) => Provider<User>.value(
-            //             value: user, child: AddCourse())));
+            //             value: user, child: AddLecture())));
           },
         ),
       ),
