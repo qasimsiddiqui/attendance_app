@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:attendance_app/shared/constants.dart';
@@ -13,14 +14,15 @@ class InstructorAddLecture extends StatefulWidget {
 class _InstructorAddLectureState extends State<InstructorAddLecture> {
   final _formKey = GlobalKey<FormState>();
 
-  //Course _course;
   String attendanceCode = '';
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    final DatabaseService _databaseService = DatabaseService(uid: user.uid);
+    final _course = Provider.of<Course>(context);
+    final DatabaseService _databaseService =
+        DatabaseService(uid: user.uid, courseID: _course.id);
     return loading
         ? Loading()
         : Scaffold(
@@ -54,18 +56,18 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                       child: Text('Add Course'),
                       onPressed: () async {
                         //TODO add the instructor attendance Code generator
-                        // if (_formKey.currentState.validate()) {
-                        //   setState(() => loading = true);
+                        if (_formKey.currentState.validate()) {
+                          setState(() => loading = true);
 
-                        //   dynamic result =
-                        //       await _databaseService.addStudentCourse(courseID);
-                        //   if (result == null) {
-                        //     setState(() => loading = false);
-                        //     Navigator.pop(context);
-                        //   } else {
-                        //     print(result.toString());
-                        //   }
-                        // }
+                          dynamic result = await _databaseService
+                              .addNewLectureInstructor(_course);
+                          if (result == null) {
+                            setState(() => loading = false);
+                            Navigator.pop(context);
+                          } else {
+                            print(result.toString());
+                          }
+                        }
                       },
                     )
                   ],

@@ -5,6 +5,7 @@ import 'package:attendance_app/models/instructor.dart';
 import 'package:attendance_app/models/user.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class DatabaseService {
   DatabaseService({this.courseID, this.uid});
@@ -327,7 +328,39 @@ class DatabaseService {
         .snapshots()
         .map(_lectureListFromSnapshot);
   }
+
+  Future createNewLectureDoc() async {
+    String id = _instructorCollection
+        .document(uid)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .document()
+        .documentID;
+
+    await _instructorCollection
+        .document(uid)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .document(id)
+        .setData({
+      'no_of_present_students': 0,
+      'credit_hour': 0, //TODO make this change
+      'date': DateTime.now().toString(),
+      'avg_attendance': 0,
+      'attendance_code': ''
+    });
+
+    return id;
+  }
+
+  //TODO add the lecture numbers in the documents dynamically
+  Future addNewLectureInstructor(Course course) async {
+    String lectureDocID = await createNewLectureDoc();
+  }
 }
 
+// Course IDs:
 //GlSp6kW9Qn1pz82Ct9gR
 //RF3DfFlAbIhAP69P4g97
