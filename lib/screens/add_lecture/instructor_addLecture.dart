@@ -29,7 +29,7 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
             drawer: appDrawer(user),
             backgroundColor: Colors.blue[200],
             appBar: AppBar(
-              title: Text('Add Course'),
+              title: Text('Add Lecture'),
               centerTitle: true,
             ),
             body: SingleChildScrollView(
