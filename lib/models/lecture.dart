@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Lecture {
@@ -29,4 +28,9 @@ class Lecture {
         dateTime = Timestamp.now(),
         averageAttendance = 0,
         attendanceCode = '';
+
+  @override
+  String toString() {
+    return 'noOfPresentStudents : $noOfPresentStudents\ncreditHours : $creditHours\ndateTime : ${dateTime.toString()}\naverageAttendance : $averageAttendance%\nattendanceCode : $attendanceCode';
+  }
 }

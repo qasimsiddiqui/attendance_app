@@ -19,4 +19,9 @@ class Instructor {
         email = '',
         number = '',
         courses = [];
+
+  @override
+  String toString() {
+    return "Name: $name, Email: $email, Number: $number, Courses: ${courses.toString()}";
+  }
 }

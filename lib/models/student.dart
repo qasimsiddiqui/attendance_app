@@ -18,6 +18,11 @@ class Student {
         courses = snapshot['courses'].map<CourseIDAndInstructorID>((course) {
           return CourseIDAndInstructorID.fromMap(course);
         }).toList();
+
+  @override
+  String toString() {
+    return "Name: $name, Email: $email, Number: $number,Reg#: $regNo, Courses: ${courses.toString()}";
+  }
 }
 
 class StudentUID {

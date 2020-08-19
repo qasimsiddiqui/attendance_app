@@ -29,4 +29,9 @@ class User {
         email = snapshot['email'],
         number = snapshot['number'],
         isStudent = isStd;
+
+  @override
+  String toString() {
+    return "UID: $uid, Name: $name, Email: $email, Number: $number, isStudent: $isStudent";
+  }
 }
