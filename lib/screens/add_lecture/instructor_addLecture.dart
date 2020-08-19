@@ -86,6 +86,8 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                           dynamic result = await _databaseService
                               .addNewLectureInstructor(_course, _lecture);
                           if (result == null) {
+                            _course.noOfLectures =
+                                '${int.parse(_course.noOfLectures) + 1}';
                             setState(() => loading = false);
                             Navigator.pop(context);
                           } else {
