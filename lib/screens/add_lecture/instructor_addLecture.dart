@@ -82,7 +82,6 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                           setState(() => loading = true);
                           _lecture.attendanceCode = attendanceCode;
                           _lecture.creditHours = creditHours;
-                          print(_lecture.toString());
 
                           dynamic result = await _databaseService
                               .addNewLectureInstructor(_course, _lecture);

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Lecture {
+  String lectureName;
   int noOfPresentStudents;
   int creditHours;
   Timestamp dateTime;
@@ -9,21 +10,24 @@ class Lecture {
   String attendanceCode;
 
   Lecture(
-      {this.noOfPresentStudents,
+      {this.lectureName,
+      this.noOfPresentStudents,
       this.creditHours,
       this.dateTime,
       this.averageAttendance,
       this.attendanceCode});
 
   Lecture.fromSnapshot(DocumentSnapshot snapshot)
-      : noOfPresentStudents = snapshot['noOfPresentStudents'],
+      : lectureName = snapshot['lectureName'],
+        noOfPresentStudents = snapshot['noOfPresentStudents'],
         creditHours = snapshot['creditHours'],
         dateTime = snapshot['dateTime'],
         averageAttendance = snapshot['averageAttendance'],
         attendanceCode = snapshot['attendanceCode'];
 
   Lecture.initialData()
-      : noOfPresentStudents = 0,
+      : lectureName = '',
+        noOfPresentStudents = 0,
         creditHours = 0,
         dateTime = Timestamp.now(),
         averageAttendance = 0,
@@ -31,6 +35,6 @@ class Lecture {
 
   @override
   String toString() {
-    return 'noOfPresentStudents : $noOfPresentStudents\ncreditHours : $creditHours\ndateTime : ${dateTime.toString()}\naverageAttendance : $averageAttendance%\nattendanceCode : $attendanceCode';
+    return 'lectureName: $lectureName\nnoOfPresentStudents : $noOfPresentStudents\ncreditHours : $creditHours\ndateTime : ${dateTime.toString()}\naverageAttendance : $averageAttendance%\nattendanceCode : $attendanceCode';
   }
 }

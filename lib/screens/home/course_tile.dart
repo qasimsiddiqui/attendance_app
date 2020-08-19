@@ -22,7 +22,7 @@ class CourseTile extends StatelessWidget {
           radius: 25.0,
         ),
         title: Text(course.name),
-        subtitle: Text(" ( " + course.id + " )"),
+        subtitle: Text("(" + course.id + ")"),
         onTap: () {
           Navigator.push(
               context,

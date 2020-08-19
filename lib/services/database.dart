@@ -347,36 +347,23 @@ class DatabaseService {
     }
   }
 
-  Future createNewLectureDoc(Lecture lecture) async {
-    String id = _instructorCollection
-        .document(uid)
-        .collection('courses')
-        .document(courseID)
-        .collection('lectures')
-        .document()
-        .documentID;
-
+  //TODO add the lecture numbers in the documents dynamically
+  Future addNewLectureInstructor(Course course, Lecture lecture) async {
+    lecture.lectureName = "Lecture ${int.parse(course.noOfLectures) + 1}";
     await _instructorCollection
         .document(uid)
         .collection('courses')
         .document(courseID)
         .collection('lectures')
-        .document(id)
+        .document(lecture.lectureName)
         .setData({
+      'lectureName': lecture.lectureName,
       'noOfPresentStudents': lecture.noOfPresentStudents,
       'creditHours': lecture.creditHours,
       'dateTime': lecture.dateTime,
       'averageAttendance': lecture.averageAttendance,
       'attendanceCode': lecture.attendanceCode
     });
-
-    return id;
-  }
-
-  //TODO add the lecture numbers in the documents dynamically
-  Future addNewLectureInstructor(Course course, Lecture lecture) async {
-    lecture.toString();
-    String lectureDocID = await createNewLectureDoc(lecture);
   }
 }
 

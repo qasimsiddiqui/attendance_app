@@ -23,7 +23,7 @@ class LectureTile extends StatelessWidget {
               child: Icon(Icons.dvr),
               radius: 25.0,
             ),
-            title: Text("${lecture.creditHours} ( ${lecture.attendanceCode} )"),
+            title: Text("${lecture.lectureName}"),
             onTap: () {
               Navigator.push(
                   context,
