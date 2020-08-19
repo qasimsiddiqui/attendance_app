@@ -318,8 +318,17 @@ class DatabaseService {
     }).toList();
   }
 
-  //get courses stream
-  Stream<List<Lecture>> get getLectures {
+  Stream<List<Lecture>> _getStudentLectures(String instructorUID) {
+    return _instructorCollection
+        .document(instructorUID)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .snapshots()
+        .map(_lectureListFromSnapshot);
+  }
+
+  Stream<List<Lecture>> _getInstructorLectures() {
     return _instructorCollection
         .document(uid)
         .collection('courses')
@@ -327,6 +336,15 @@ class DatabaseService {
         .collection('lectures')
         .snapshots()
         .map(_lectureListFromSnapshot);
+  }
+
+  //get courses stream
+  Stream<List<Lecture>> getLectures(bool isStudent, String instructorUID) {
+    if (isStudent) {
+      return _getStudentLectures(instructorUID);
+    } else {
+      return _getInstructorLectures();
+    }
   }
 
   Future createNewLectureDoc() async {

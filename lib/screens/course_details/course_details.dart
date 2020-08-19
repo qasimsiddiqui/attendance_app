@@ -18,7 +18,8 @@ class CourseDetails extends StatelessWidget {
     User user = Provider.of<User>(context);
 
     return StreamProvider<List<Lecture>>.value(
-      value: DatabaseService(uid: user.uid, courseID: course.id).getLectures,
+      value: DatabaseService(uid: user.uid, courseID: course.id)
+          .getLectures(user.isStudent, course.instructorUID),
       child: Scaffold(
         drawer: appDrawer(user),
         appBar: AppBar(
