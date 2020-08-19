@@ -22,37 +22,25 @@ class Home extends StatelessWidget {
         initialData: [],
         value: DatabaseService(uid: userUID.uid).getCourses(user.isStudent),
         child: Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (context, boo) => [
-              SliverAppBar(
-                pinned: true,
-                title: Text('Home Page'),
-                elevation: 0.0,
-                expandedHeight: 150,
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(30))),
-                actions: <Widget>[
-                  FlatButton.icon(
-                    icon: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      await _authService.signOut();
-                    },
-                  )
-                ],
-                //flexibleSpace: FlexibleSpaceBar(title: Text('')),
+          appBar: AppBar(
+            title: Text('Home'),
+            actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  await _authService.signOut();
+                },
               )
             ],
-            body: CourseList(),
           ),
+          body: CourseList(),
           drawer: appDrawer(user),
           floatingActionButton: FloatingActionButton.extended(
             label: Text('Add Course'),

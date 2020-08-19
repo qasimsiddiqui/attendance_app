@@ -19,15 +19,26 @@ class LectureDetails extends StatelessWidget {
         title: Text('Lecture Details'),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Text("noOfPresentStudents : ${lecture.noOfPresentStudents}"),
-            Text("creditHours : ${lecture.creditHours}"),
-            Text("dateTime : ${lecture.dateTime}"),
-            Text("averageAttendance : ${lecture.averageAttendance}"),
-            Text("attendanceCode : ${lecture.attendanceCode}")
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "noOfPresentStudents : ${lecture.noOfPresentStudents}\n\n" +
+                    "creditHours : ${lecture.creditHours}\n\n" +
+                    "dateTime : ${lecture.dateTime}\n\n" +
+                    "averageAttendance : ${lecture.averageAttendance}%\n\n" +
+                    "attendanceCode : ${lecture.attendanceCode}\n\n",
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
         ),
       ),
     );
