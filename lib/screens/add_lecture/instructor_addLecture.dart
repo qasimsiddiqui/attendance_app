@@ -1,10 +1,12 @@
 import 'package:attendance_app/models/course.dart';
+import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:random_string/random_string.dart';
 
 class InstructorAddLecture extends StatefulWidget {
   @override
@@ -14,7 +16,9 @@ class InstructorAddLecture extends StatefulWidget {
 class _InstructorAddLectureState extends State<InstructorAddLecture> {
   final _formKey = GlobalKey<FormState>();
 
-  String attendanceCode = '';
+  Lecture _lecture = new Lecture.initialData();
+  String attendanceCode = randomAlphaNumeric(8).toUpperCase();
+  int creditHours = 0;
   bool loading = false;
 
   @override
@@ -23,6 +27,7 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
     final _course = Provider.of<Course>(context);
     final DatabaseService _databaseService =
         DatabaseService(uid: user.uid, courseID: _course.id);
+
     return loading
         ? Loading()
         : Scaffold(
@@ -43,7 +48,9 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                     TextFormField(
                       //TODO auto generate an attendence Code
                       decoration: textInputDecoration.copyWith(
-                          labelText: 'Enter attendance Code'),
+                          labelText: 'Attendance Code'),
+                      initialValue: attendanceCode,
+                      readOnly: true,
                       onChanged: (val) {
                         setState(() => attendanceCode = val);
                       },
@@ -51,16 +58,34 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                     SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      //TODO auto generate an attendence Code
+                      decoration: textInputDecoration.copyWith(
+                          labelText: 'Enter credit Hours'),
+                      onChanged: (val) {
+                        setState(() => creditHours = int.parse(val));
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('DateTimePickr will go here'),
+                    SizedBox(
+                      height: 20,
+                    ),
                     RaisedButton(
                       color: Colors.red,
-                      child: Text('Add Course'),
+                      child: Text('Add Lecture'),
                       onPressed: () async {
                         //TODO add the instructor attendance Code generator
                         if (_formKey.currentState.validate()) {
                           setState(() => loading = true);
+                          _lecture.attendanceCode = attendanceCode;
+                          _lecture.creditHours = creditHours;
+                          print(_lecture.toString());
 
                           dynamic result = await _databaseService
-                              .addNewLectureInstructor(_course);
+                              .addNewLectureInstructor(_course, _lecture);
                           if (result == null) {
                             setState(() => loading = false);
                             Navigator.pop(context);

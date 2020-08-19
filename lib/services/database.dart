@@ -347,7 +347,7 @@ class DatabaseService {
     }
   }
 
-  Future createNewLectureDoc() async {
+  Future createNewLectureDoc(Lecture lecture) async {
     String id = _instructorCollection
         .document(uid)
         .collection('courses')
@@ -363,19 +363,20 @@ class DatabaseService {
         .collection('lectures')
         .document(id)
         .setData({
-      'no_of_present_students': 0,
-      'credit_hour': 0, //TODO make this change
-      'date': DateTime.now().toString(),
-      'avg_attendance': 0,
-      'attendance_code': ''
+      'noOfPresentStudents': lecture.noOfPresentStudents,
+      'creditHours': lecture.creditHours,
+      'dateTime': lecture.dateTime,
+      'averageAttendance': lecture.averageAttendance,
+      'attendanceCode': lecture.attendanceCode
     });
 
     return id;
   }
 
   //TODO add the lecture numbers in the documents dynamically
-  Future addNewLectureInstructor(Course course) async {
-    String lectureDocID = await createNewLectureDoc();
+  Future addNewLectureInstructor(Course course, Lecture lecture) async {
+    lecture.toString();
+    String lectureDocID = await createNewLectureDoc(lecture);
   }
 }
 
