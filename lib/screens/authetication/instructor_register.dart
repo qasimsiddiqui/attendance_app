@@ -22,6 +22,7 @@ class _InstructorRegisterPageState extends State<InstructorRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Instructor Register'), centerTitle: true),
       body: Container(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
