@@ -13,11 +13,11 @@ class LectureTile extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     return Padding(
-      padding: EdgeInsets.only(top: 8.0),
+      padding: EdgeInsets.only(top: 0.0),
       child: Card(
-        margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+        margin: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5.0),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 5.0),
           child: ListTile(
             leading: CircleAvatar(
               child: Icon(Icons.dvr),

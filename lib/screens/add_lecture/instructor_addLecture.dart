@@ -46,7 +46,6 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                   children: <Widget>[
                     SizedBox(height: 20.0),
                     TextFormField(
-                      //TODO auto generate an attendence Code
                       decoration: textInputDecoration.copyWith(
                           labelText: 'Attendance Code'),
                       initialValue: attendanceCode,
@@ -59,7 +58,6 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                       height: 20,
                     ),
                     TextFormField(
-                      //TODO auto generate an attendence Code
                       decoration: textInputDecoration.copyWith(
                           labelText: 'Enter credit Hours'),
                       onChanged: (val) {
@@ -77,7 +75,6 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                       color: Colors.red,
                       child: Text('Add Lecture'),
                       onPressed: () async {
-                        //TODO add the instructor attendance Code generator
                         if (_formKey.currentState.validate()) {
                           setState(() => loading = true);
                           _lecture.attendanceCode = attendanceCode;
