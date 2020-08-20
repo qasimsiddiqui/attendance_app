@@ -29,13 +29,14 @@ class _RegisterState extends State<Register> {
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      height: 160,
-                      width: 160,
+                      height: MediaQuery.of(context).size.height / 4.5,
+                      width: MediaQuery.of(context).size.width / 3,
                       decoration: BoxDecoration(
                           color: Colors.cyan,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.red)),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           Image.asset(
                             'assets/images/user.png',
@@ -58,8 +59,8 @@ class _RegisterState extends State<Register> {
                   ),
                   GestureDetector(
                     child: Container(
-                      height: 160,
-                      width: 160,
+                      height: MediaQuery.of(context).size.height / 4.5,
+                      width: MediaQuery.of(context).size.width / 3,
                       decoration: BoxDecoration(
                           color: Colors.cyan,
                           borderRadius: BorderRadius.circular(10),
@@ -69,6 +70,7 @@ class _RegisterState extends State<Register> {
                         children: <Widget>[
                           Image.asset(
                             'assets/images/business_user.png',
+                            width: MediaQuery.of(context).size.width / 3,
                           ),
                           Text('Instructor')
                         ],
@@ -90,7 +92,6 @@ class _RegisterState extends State<Register> {
                 children: <Widget>[
                   Text('Already Registered?'),
                   FlatButton(
-                      color: Colors.red,
                       onPressed: () {
                         widget.toggleView();
                       },
