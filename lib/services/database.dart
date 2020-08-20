@@ -349,7 +349,8 @@ class DatabaseService {
 
   //TODO add the lecture numbers in the documents dynamically
   Future addNewLectureInstructor(Course course, Lecture lecture) async {
-    lecture.lectureName = "Lecture ${int.parse(course.noOfLectures) + 1}";
+    String nextLectureNumber = "${int.parse(course.noOfLectures) + 1}";
+    lecture.lectureName = "Lecture $nextLectureNumber";
     await _instructorCollection
         .document(uid)
         .collection('courses')
@@ -364,6 +365,11 @@ class DatabaseService {
       'averageAttendance': lecture.averageAttendance,
       'attendanceCode': lecture.attendanceCode
     });
+    await _instructorCollection
+        .document(uid)
+        .collection('courses')
+        .document(courseID)
+        .updateData({'no_of_lectures': nextLectureNumber});
   }
 }
 
