@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:attendance_app/shared/constants.dart';
@@ -16,11 +17,19 @@ class _StudentAddLectureState extends State<StudentAddLecture> {
   //Course _course;
   String attendanceCode = '';
   bool loading = false;
+  final errorSnackBar = SnackBar(
+    content: Text('Error Occured, Attendance not marked'),
+  );
+  final markedSnackBar = SnackBar(
+    content: Text('Attendance Marked'),
+  );
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    final DatabaseService _databaseService = DatabaseService(uid: user.uid);
+    final course = Provider.of<Course>(context);
+    final DatabaseService _databaseService =
+        DatabaseService(uid: user.uid, courseID: course.id);
     return loading
         ? Loading()
         : Scaffold(
@@ -51,20 +60,22 @@ class _StudentAddLectureState extends State<StudentAddLecture> {
                     RaisedButton(
                       color: Colors.red,
                       child: Text('Add Course'),
-                      onPressed: () {
-                        // TODO add the student attendance Code
-                        // if (_formKey.currentState.validate()) {
-                        //   setState(() => loading = true);
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() => loading = true);
 
-                        //   dynamic result =
-                        //       await _databaseService.addStudentCourse(courseID);
-                        //   if (result == null) {
-                        //     setState(() => loading = false);
-                        //     Navigator.pop(context);
-                        //   } else {
-                        //     print(result.toString());
-                        //   }
-                        //}
+                          dynamic result = await _databaseService
+                              .addStudentLectureAttendance(
+                                  course, attendanceCode);
+                          if (result == null) {
+                            setState(() => loading = false);
+                            Navigator.pop(context);
+                          } else {
+                            print(result.toString());
+                            setState(() => loading = false);
+                            Navigator.pop(context);
+                          }
+                        }
                       },
                     )
                   ],

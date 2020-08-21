@@ -347,7 +347,6 @@ class DatabaseService {
     }
   }
 
-  //TODO add the lecture numbers in the documents dynamically
   Future addNewLectureInstructor(Course course, Lecture lecture) async {
     String nextLectureNumber = "${int.parse(course.noOfLectures) + 1}";
     lecture.lectureName = "Lecture $nextLectureNumber";
@@ -370,6 +369,62 @@ class DatabaseService {
         .collection('courses')
         .document(courseID)
         .updateData({'no_of_lectures': nextLectureNumber});
+  }
+
+  Future addStudentLectureAttendance(
+      Course course, String attendanceCode) async {
+    print(attendanceCode);
+    QuerySnapshot queryResult = await _instructorCollection
+        .document(course.instructorUID)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .where('attendanceCode', isEqualTo: attendanceCode)
+        .getDocuments();
+
+    //get a list of all lectures that have this attendanceCode.
+    //only one should be return, this is done just in case
+    List<Lecture> lecturesList =
+        queryResult.documents.map((e) => Lecture.fromSnapshot(e)).toList();
+    for (var lecture in lecturesList) {
+      print(lecture.toString());
+    }
+    //checks to see if only one course is found
+    if (lecturesList.isEmpty) {
+      return "Either Attendance Code is invalid or Lecture does not Exist";
+    } else if (lecturesList.length != 1) {
+      return "More than one lectures found";
+    } else {
+      await _instructorCollection
+          .document(course.instructorUID)
+          .collection('courses')
+          .document(courseID)
+          .collection('lectures')
+          .document(lecturesList[0].lectureName)
+          .collection('present_students')
+          .document(uid)
+          .setData({'attendanceTime': Timestamp.now()});
+    }
+
+    String creditHoursDone =
+        "${int.parse(course.creditHoursDone) + lecturesList[0].creditHours}";
+
+    await _instructorCollection
+        .document(course.instructorUID)
+        .collection('courses')
+        .document(courseID)
+        .updateData({'credit_hours_done': creditHoursDone});
+
+    await _instructorCollection
+        .document(course.instructorUID)
+        .collection('courses')
+        .document(courseID)
+        .collection('lectures')
+        .document(lecturesList[0].lectureName)
+        .setData({
+      'noOfPresentStudents': lecturesList[0].noOfPresentStudents + 1,
+      'averageAttendance': (lecturesList[0].noOfPresentStudents + 1) / 10,
+    }, merge: true);
   }
 }
 

@@ -6,7 +6,7 @@ class Lecture {
   int creditHours;
   Timestamp dateTime;
   //DateTime dateTime;
-  int averageAttendance;
+  double averageAttendance;
   String attendanceCode;
 
   Lecture(
