@@ -85,6 +85,8 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                           if (result == null) {
                             _course.noOfLectures =
                                 '${int.parse(_course.noOfLectures) + 1}';
+                            _course.creditHoursDone =
+                                '${int.parse(_course.creditHoursDone) + creditHours}';
                             setState(() => loading = false);
                             Navigator.pop(context);
                           } else {

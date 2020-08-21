@@ -349,6 +349,8 @@ class DatabaseService {
 
   Future addNewLectureInstructor(Course course, Lecture lecture) async {
     String nextLectureNumber = "${int.parse(course.noOfLectures) + 1}";
+    String creditHoursDone =
+        "${int.parse(course.creditHoursDone) + lecture.creditHours}";
     lecture.lectureName = "Lecture $nextLectureNumber";
     await _instructorCollection
         .document(uid)
@@ -368,7 +370,10 @@ class DatabaseService {
         .document(uid)
         .collection('courses')
         .document(courseID)
-        .updateData({'no_of_lectures': nextLectureNumber});
+        .updateData({
+      'no_of_lectures': nextLectureNumber,
+      'credit_hours_done': creditHoursDone
+    });
   }
 
   Future addStudentLectureAttendance(
@@ -395,7 +400,7 @@ class DatabaseService {
     } else if (lecturesList.length != 1) {
       return "More than one lectures found";
     } else {
-      await _instructorCollection
+      DocumentSnapshot studentAlreadyExists = await _instructorCollection
           .document(course.instructorUID)
           .collection('courses')
           .document(courseID)
@@ -403,7 +408,21 @@ class DatabaseService {
           .document(lecturesList[0].lectureName)
           .collection('present_students')
           .document(uid)
-          .setData({'attendanceTime': Timestamp.now()});
+          .get();
+
+      if (!studentAlreadyExists.exists) {
+        await _instructorCollection
+            .document(course.instructorUID)
+            .collection('courses')
+            .document(courseID)
+            .collection('lectures')
+            .document(lecturesList[0].lectureName)
+            .collection('present_students')
+            .document(uid)
+            .setData({'attendanceTime': Timestamp.now()});
+      } else {
+        return "Attendance Already Marked";
+      }
     }
 
     String creditHoursDone =
