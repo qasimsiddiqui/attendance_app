@@ -1,6 +1,7 @@
 import 'package:attendance_app/services/auth.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/registration_fields.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 class StudentRegisterPage extends StatefulWidget {
@@ -105,6 +106,24 @@ class _StudentRegisterPageState extends State<StudentRegisterPage> {
                               });
                             } else {
                               Navigator.pop(context);
+                              Flushbar(
+                                margin: EdgeInsets.all(10),
+                                borderRadius: 8,
+                                message: "Sucessfully Registered",
+                                duration: Duration(seconds: 3),
+                                backgroundGradient: LinearGradient(colors: [
+                                  Colors.green[300],
+                                  Colors.green[400]
+                                ]),
+                                backgroundColor: Colors.red,
+                                boxShadows: [
+                                  BoxShadow(
+                                    color: Colors.green[800],
+                                    offset: Offset(0.0, 2.0),
+                                    blurRadius: 3.0,
+                                  )
+                                ],
+                              )..show(context);
                             }
                           }
                         }),

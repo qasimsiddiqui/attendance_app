@@ -111,8 +111,20 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                           } else {
                             print(result.toString());
                             Flushbar(
+                              margin: EdgeInsets.all(10),
+                              borderRadius: 8,
                               message: result.toString(),
                               duration: Duration(seconds: 3),
+                              backgroundGradient: LinearGradient(
+                                  colors: [Colors.red[300], Colors.red[400]]),
+                              backgroundColor: Colors.red,
+                              boxShadows: [
+                                BoxShadow(
+                                  color: Colors.red[800],
+                                  offset: Offset(0.0, 2.0),
+                                  blurRadius: 3.0,
+                                )
+                              ],
                             )..show(context);
                           }
                         }

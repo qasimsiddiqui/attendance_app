@@ -1,4 +1,5 @@
 import 'package:attendance_app/services/auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/registration_fields.dart';
@@ -89,6 +90,26 @@ class _SignInState extends State<SignIn> {
                                         error = 'Could Not Sign In';
                                         loading = false;
                                       });
+                                    } else {
+                                      Flushbar(
+                                        margin: EdgeInsets.all(10),
+                                        borderRadius: 8,
+                                        message: "Sign In Sucessful",
+                                        duration: Duration(seconds: 3),
+                                        backgroundGradient: LinearGradient(
+                                            colors: [
+                                              Colors.green[300],
+                                              Colors.green[400]
+                                            ]),
+                                        backgroundColor: Colors.red,
+                                        boxShadows: [
+                                          BoxShadow(
+                                            color: Colors.green[800],
+                                            offset: Offset(0.0, 2.0),
+                                            blurRadius: 3.0,
+                                          )
+                                        ],
+                                      )..show(context);
                                     }
                                   }
                                 }),
