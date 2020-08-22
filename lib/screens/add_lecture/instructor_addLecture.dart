@@ -4,6 +4,7 @@ import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/loading.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
@@ -89,8 +90,28 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                                 '${int.parse(_course.creditHoursDone) + creditHours}';
                             setState(() => loading = false);
                             Navigator.pop(context);
+                            Flushbar(
+                              message: "Leture Added",
+                              duration: Duration(seconds: 3),
+                              backgroundGradient: LinearGradient(colors: [
+                                Colors.green[300],
+                                Colors.green[400]
+                              ]),
+                              backgroundColor: Colors.red,
+                              boxShadows: [
+                                BoxShadow(
+                                  color: Colors.green[800],
+                                  offset: Offset(0.0, 2.0),
+                                  blurRadius: 3.0,
+                                )
+                              ],
+                            )..show(context);
                           } else {
                             print(result.toString());
+                            Flushbar(
+                              message: result.toString(),
+                              duration: Duration(seconds: 3),
+                            )..show(context);
                           }
                         }
                       },
