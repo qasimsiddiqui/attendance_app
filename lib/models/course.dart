@@ -9,6 +9,7 @@ class Course {
   String noOfLectures;
   String totalCreditHours;
   String creditHoursDone;
+  String noOfStudents;
 
   Course(
       {this.id,
@@ -18,7 +19,8 @@ class Course {
       this.session,
       this.noOfLectures,
       this.totalCreditHours,
-      this.creditHoursDone});
+      this.creditHoursDone,
+      this.noOfStudents});
 
   Course.initialData()
       : id = '',
@@ -28,7 +30,8 @@ class Course {
         session = '',
         noOfLectures = '0',
         totalCreditHours = '0',
-        creditHoursDone = '0';
+        creditHoursDone = '0',
+        noOfStudents = '0';
 
   Course.fromSnapshot(DocumentSnapshot snapshot)
       : id = snapshot['id'],
@@ -38,7 +41,8 @@ class Course {
         session = snapshot['session'],
         noOfLectures = snapshot['no_of_lectures'],
         totalCreditHours = snapshot['total_credit_hours'],
-        creditHoursDone = snapshot['credit_hours_done'];
+        creditHoursDone = snapshot['credit_hours_done'],
+        noOfStudents = snapshot['no_of_students'];
 
   @override
   String toString() {
@@ -63,10 +67,9 @@ class CourseNameAndID {
 
   CourseNameAndID(this.name, this.id);
 
-  //TODO set the code and id parameters of this func
   CourseNameAndID.fromMap(Map<dynamic, dynamic> map)
       : name = map['name'],
-        id = map['code'];
+        id = map['id'];
 
   String get courseName {
     return name;
