@@ -91,6 +91,8 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                             setState(() => loading = false);
                             Navigator.pop(context);
                             Flushbar(
+                              margin: EdgeInsets.all(10),
+                              borderRadius: 8,
                               message: "Leture Added",
                               duration: Duration(seconds: 3),
                               backgroundGradient: LinearGradient(colors: [

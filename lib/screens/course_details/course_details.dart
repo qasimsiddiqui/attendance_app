@@ -26,7 +26,10 @@ class CourseDetails extends StatelessWidget {
           title: Text('Lectures'),
           centerTitle: true,
         ),
-        body: LectureList(),
+        body: Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: LectureList(),
+        ),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Add Lecture'),
           icon: Icon(Icons.add),
