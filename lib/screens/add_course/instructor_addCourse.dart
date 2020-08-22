@@ -17,6 +17,7 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
   String name = '';
   String courseCode = '';
   String session = '';
+  String creditHours = '';
 
   bool loading = false;
 
@@ -73,6 +74,18 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
                     SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      decoration: textInputDecoration.copyWith(
+                          labelText: 'Credit Hours:'),
+                      validator: (val) =>
+                          val.isEmpty ? 'Enter credit hours of course' : null,
+                      onChanged: (val) {
+                        setState(() => creditHours = val);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     RaisedButton(
                       color: Colors.red,
                       child: Text('Add Course'),
@@ -80,10 +93,12 @@ class _InstructorAddCourseState extends State<InstructorAddCourse> {
                         if (_formKey.currentState.validate()) {
                           setState(() => loading = true);
 
-                          dynamic result = await _databaseService
-                              .addInstructorCourse(name, courseCode, session);
+                          dynamic result =
+                              await _databaseService.addInstructorCourse(
+                                  name, courseCode, session, creditHours);
                           if (result == null) {
                             setState(() => loading = false);
+                            Navigator.pop(context);
                           } else {
                             print(result.toString());
                           }

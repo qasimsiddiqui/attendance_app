@@ -5,13 +5,12 @@ import 'package:attendance_app/models/instructor.dart';
 import 'package:attendance_app/models/user.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class DatabaseService {
   DatabaseService({this.courseID, this.uid});
 
-  final String uid;
   final String courseID;
+  final String uid;
 
   //collection reference
   final CollectionReference _instructorCollection =
@@ -195,9 +194,10 @@ class DatabaseService {
         {'name': name, 'number': number, 'email': email, 'courses': []});
   }
 
-  Future addInstructorCourse(
-      String name, String courseCode, String session) async {
-    String id = await addInstructorCourseData(name, courseCode, session);
+  Future addInstructorCourse(String name, String courseCode, String session,
+      String creditHours) async {
+    String id =
+        await addInstructorCourseData(name, courseCode, session, creditHours);
 
     return await _instructorCollection
         .document(uid)
@@ -238,8 +238,8 @@ class DatabaseService {
   ///////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  Future addInstructorCourseData(
-      String name, String courseCode, String session) async {
+  Future addInstructorCourseData(String name, String courseCode, String session,
+      String creditHours) async {
     String id = _instructorCollection
         .document(uid)
         .collection('courses')
@@ -254,6 +254,11 @@ class DatabaseService {
       'name': name,
       'course_code': courseCode,
       'session': session,
+      'credit_hours_done': "0",
+      'instructor_uid': uid,
+      'no_of_lectures': "0",
+      'no_of_students': "0",
+      'total_credit_hours': creditHours,
       'id': id ?? ''
     });
 
