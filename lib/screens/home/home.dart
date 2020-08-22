@@ -8,7 +8,12 @@ import 'package:attendance_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/screens/home/course_list.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final AuthService _authService = AuthService();
 
   @override
@@ -19,7 +24,6 @@ class Home extends StatelessWidget {
     // print(userUID.uid);
 
     return StreamProvider<List<Course>>.value(
-        initialData: [],
         value: DatabaseService(uid: userUID.uid).getCourses(user.isStudent),
         child: Scaffold(
           appBar: AppBar(
@@ -47,10 +51,11 @@ class Home extends StatelessWidget {
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Provider<User>.value(
-                          value: user, child: AddCourse())));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Provider<User>.value(
+                              value: user, child: AddCourse())))
+                  .then((value) => setState(() {}));
             },
           ),
         ));
