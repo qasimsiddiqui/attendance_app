@@ -103,6 +103,8 @@ class _StudentRegisterPageState extends State<StudentRegisterPage> {
                               setState(() {
                                 _error = 'please supply a valid email';
                               });
+                            } else {
+                              Navigator.pop(context);
                             }
                           }
                         }),
