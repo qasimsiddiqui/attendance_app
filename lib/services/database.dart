@@ -137,6 +137,20 @@ class DatabaseService {
           .document(uid)
           .setData({'no_of_attended_lec': 0, 'absents': 0});
 
+      DocumentSnapshot _courseDocument = await _instructorCollection
+          .document(instructorUID[0])
+          .collection('courses')
+          .document(courseID)
+          .get();
+
+      await _instructorCollection
+          .document(instructorUID[0])
+          .collection('courses')
+          .document(courseID)
+          .updateData({
+        'no_of_students': "${int.parse(_courseDocument['no_of_students']) + 1}"
+      });
+
       await _studentCollection.document(uid).updateData({
         'courses': FieldValue.arrayUnion([
           {'instructor_uid': instructorUID[0], 'course_id': courseID}
