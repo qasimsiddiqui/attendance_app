@@ -6,7 +6,7 @@ class Lecture {
   int creditHours;
   Timestamp dateTime;
   //DateTime dateTime;
-  double averageAttendance;
+  String averageAttendance;
   String attendanceCode;
 
   Lecture(
@@ -30,7 +30,7 @@ class Lecture {
         noOfPresentStudents = 0,
         creditHours = 0,
         dateTime = Timestamp.now(),
-        averageAttendance = 0,
+        averageAttendance = '0',
         attendanceCode = '';
 
   @override

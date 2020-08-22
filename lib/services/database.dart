@@ -444,15 +444,11 @@ class DatabaseService {
       }
     }
 
-    String creditHoursDone =
-        "${int.parse(course.creditHoursDone) + lecturesList[0].creditHours}";
-
-    await _instructorCollection
-        .document(course.instructorUID)
-        .collection('courses')
-        .document(courseID)
-        .updateData({'credit_hours_done': creditHoursDone});
-
+    int noOfPresentStudents = lecturesList[0].noOfPresentStudents + 1;
+    int noOfStudents = int.parse(course.noOfStudents);
+    double avgAttendance =
+        noOfPresentStudents.toDouble() / noOfStudents.toDouble();
+    String avgAttendanceString = '${avgAttendance.toStringAsFixed(2)}';
     await _instructorCollection
         .document(course.instructorUID)
         .collection('courses')
@@ -460,8 +456,8 @@ class DatabaseService {
         .collection('lectures')
         .document(lecturesList[0].lectureName)
         .setData({
-      'noOfPresentStudents': lecturesList[0].noOfPresentStudents + 1,
-      'averageAttendance': (lecturesList[0].noOfPresentStudents + 1) / 10,
+      'noOfPresentStudents': noOfPresentStudents,
+      'averageAttendance': avgAttendanceString,
     }, merge: true);
   }
 }
