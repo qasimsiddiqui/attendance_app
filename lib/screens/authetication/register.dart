@@ -29,7 +29,7 @@ class _RegisterState extends State<Register> {
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      height: MediaQuery.of(context).size.height / 4.5,
+                      height: MediaQuery.of(context).size.height / 4,
                       width: MediaQuery.of(context).size.width / 3,
                       decoration: BoxDecoration(
                           color: Colors.cyan,
@@ -59,7 +59,7 @@ class _RegisterState extends State<Register> {
                   ),
                   GestureDetector(
                     child: Container(
-                      height: MediaQuery.of(context).size.height / 4.5,
+                      height: MediaQuery.of(context).size.height / 4,
                       width: MediaQuery.of(context).size.width / 3,
                       decoration: BoxDecoration(
                           color: Colors.cyan,
