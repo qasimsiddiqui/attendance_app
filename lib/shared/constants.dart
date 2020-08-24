@@ -1,6 +1,9 @@
 import 'package:attendance_app/models/user.dart';
 import 'package:flutter/material.dart';
 
+const textStyling =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20);
+
 const textInputDecoration = InputDecoration(
     fillColor: Colors.white,
     filled: true,

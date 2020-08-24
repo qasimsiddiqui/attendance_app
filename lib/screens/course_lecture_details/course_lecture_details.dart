@@ -1,6 +1,7 @@
 import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/screens/add_lecture/add_lecture.dart';
+import 'package:attendance_app/screens/course_details/course_details.dart';
 import 'package:attendance_app/screens/course_lecture_details/lecture_list.dart';
 import 'package:attendance_app/screens/showRegisteredStudents/show_registered_students.dart';
 import 'package:attendance_app/services/database.dart';
@@ -27,6 +28,12 @@ class _CourseLectureDetailsState extends State<CourseLectureDetails> {
 
     void _selectedOption(OptionSelected option) {
       if (option == OptionSelected.showCourseDetails) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CourseDetails(
+                      course: widget.course,
+                    )));
       } else {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => ShowRegisteredStudents()));
