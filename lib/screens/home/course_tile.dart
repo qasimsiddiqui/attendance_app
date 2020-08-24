@@ -1,6 +1,6 @@
 import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/user.dart';
-import 'package:attendance_app/screens/course_details/course_details.dart';
+import 'package:attendance_app/screens/course_lecture_details/course_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,8 @@ class CourseTile extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => Provider.value(
-                      value: user, child: CourseDetails(course: course))));
+                      value: user,
+                      child: CourseLectureDetails(course: course))));
         },
       ),
     );

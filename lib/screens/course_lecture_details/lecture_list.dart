@@ -1,5 +1,5 @@
 import 'package:attendance_app/models/lecture.dart';
-import 'package:attendance_app/screens/course_details/lecture_tile.dart';
+import 'package:attendance_app/screens/course_lecture_details/lecture_tile.dart';
 import 'package:attendance_app/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
