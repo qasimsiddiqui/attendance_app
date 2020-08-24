@@ -74,7 +74,7 @@ class _StudentAddLectureState extends State<StudentAddLecture> {
                             Flushbar(
                               margin: EdgeInsets.all(10),
                               borderRadius: 8,
-                              message: "Leture Added",
+                              message: "Attendance Marked",
                               duration: Duration(seconds: 3),
                               backgroundGradient: LinearGradient(colors: [
                                 Colors.green[300],

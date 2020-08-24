@@ -447,7 +447,7 @@ class DatabaseService {
     int noOfPresentStudents = lecturesList[0].noOfPresentStudents + 1;
     int noOfStudents = int.parse(course.noOfStudents);
     double avgAttendance =
-        noOfPresentStudents.toDouble() / noOfStudents.toDouble();
+        (noOfPresentStudents.toDouble() / noOfStudents.toDouble()) * 100;
     String avgAttendanceString = '${avgAttendance.toStringAsFixed(2)}';
     await _instructorCollection
         .document(course.instructorUID)
