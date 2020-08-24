@@ -135,7 +135,7 @@ class DatabaseService {
           .document(courseID)
           .collection('registered_students')
           .document(uid)
-          .setData({'no_of_attended_lec': 0, 'absents': 0});
+          .setData({'no_of_attended_lec': 0});
 
       DocumentSnapshot _courseDocument = await _instructorCollection
           .document(instructorUID[0])
@@ -290,7 +290,7 @@ class DatabaseService {
     List<Course> courseList = new List();
 
     DocumentSnapshot stdDoc = await _studentCollection.document(uid).get();
-    Student _student = new Student.fromSnapshot(stdDoc);
+    Student _student = new Student.fromSnapshot(stdDoc, 0);
 
     if (_student.courses.length == 0) {
       return; //TODO add appropriate return type
@@ -439,6 +439,14 @@ class DatabaseService {
             .collection('present_students')
             .document(uid)
             .setData({'attendanceTime': Timestamp.now()});
+
+        await _instructorCollection
+            .document(course.instructorUID)
+            .collection('courses')
+            .document(courseID)
+            .collection('registered_students')
+            .document(uid)
+            .updateData({'no_of_attended_lec': FieldValue.increment(1)});
       } else {
         return "Attendance Already Marked";
       }
@@ -459,6 +467,32 @@ class DatabaseService {
       'noOfPresentStudents': noOfPresentStudents,
       'averageAttendance': avgAttendanceString,
     }, merge: true);
+  }
+
+  Stream<List<Student>> getCourseRegisteredStudents(Course course) async* {
+    List<Student> studentList = new List();
+
+    QuerySnapshot regStudentsQuery = await _instructorCollection
+        .document(course.instructorUID)
+        .collection('courses')
+        .document(course.id)
+        .collection('registered_students')
+        .getDocuments();
+
+    if (regStudentsQuery.documents.length == 0) {
+      return; //TODO add appropriate return type
+    } else {
+      for (DocumentSnapshot doc in regStudentsQuery.documents) {
+        DocumentSnapshot studentDoc =
+            await _studentCollection.document(doc.documentID).get();
+
+        Student _student =
+            new Student.fromSnapshot(studentDoc, doc['no_of_attended_lec']);
+        studentList.add(_student);
+        print(_student.toString());
+      }
+      yield studentList;
+    }
   }
 }
 

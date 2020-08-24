@@ -35,8 +35,12 @@ class _CourseLectureDetailsState extends State<CourseLectureDetails> {
                       course: widget.course,
                     )));
       } else {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ShowRegisteredStudents()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ShowRegisteredStudents(
+                      course: widget.course,
+                    )));
       }
     }
 

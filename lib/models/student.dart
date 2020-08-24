@@ -6,15 +6,17 @@ class Student {
   final String email;
   final String number;
   final String regNo;
+  int noOfAttendedLectures;
   List<CourseIDAndInstructorID> courses;
 
   Student({this.name, this.email, this.number, this.regNo});
 
-  Student.fromSnapshot(DocumentSnapshot snapshot)
+  Student.fromSnapshot(DocumentSnapshot snapshot, int noOfAL)
       : name = snapshot['name'],
         email = snapshot['email'],
         number = snapshot['number'],
         regNo = snapshot['registration_No'],
+        noOfAttendedLectures = noOfAL,
         courses = snapshot['courses'].map<CourseIDAndInstructorID>((course) {
           return CourseIDAndInstructorID.fromMap(course);
         }).toList();
