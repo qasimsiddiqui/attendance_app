@@ -95,13 +95,18 @@ class _InstructorAddLectureState extends State<InstructorAddLecture> {
                               _dateString =
                                   "Date: ${_dateTime.day} - ${_dateTime.month} - ${_dateTime.year}";
                               _timeString =
-                                  "Time: ${_dateTime.hour > 12 ? _dateTime.hour - 12 : _dateTime.hour} : ";
+                                  "Time: ${_dateTime.hour > 12 ? _dateTime.hour - 12 : _dateTime.hour}:";
                               if (_dateTime.minute < 10) {
                                 _timeString =
                                     _timeString + "0${_dateTime.minute}";
                               } else {
                                 _timeString =
                                     _timeString + "${_dateTime.minute}";
+                              }
+                              if (_dateTime.hour > 12) {
+                                _timeString = _timeString + " PM";
+                              } else {
+                                _timeString = _timeString + " AM";
                               }
                             });
                           },
