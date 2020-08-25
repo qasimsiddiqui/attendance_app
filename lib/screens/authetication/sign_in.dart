@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/registration_fields.dart';
 import 'package:attendance_app/shared/loading.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -124,50 +126,14 @@ class _SignInState extends State<SignIn> {
                             Text('or Select an option to Register',
                                 style: TextStyle(color: Colors.white)),
                             SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.transparent,
-                                      backgroundImage: AssetImage(
-                                        'assets/images/business_user.png',
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      widget.toggleView();
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      child: Text('Google'),
-                                      backgroundColor: Colors.transparent,
-                                      // backgroundImage: AssetImage(
-                                      //     'assets/images/business_user.png'),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      child: Text('FaceBook'),
-                                      backgroundColor: Colors.transparent,
-                                      // backgroundImage: AssetImage(
-                                      //     'assets/images/business_user.png'),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                            SignInButton(Buttons.Email,
+                                text: "Register with Email", onPressed: () {
+                              widget.toggleView();
+                            }),
+                            SignInButton(Buttons.Google,
+                                text: "Register with Google", onPressed: () {
+                              //_authService.signInWithGoogle();
+                            })
                           ]))),
             ),
           );
