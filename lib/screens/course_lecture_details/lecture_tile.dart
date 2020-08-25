@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/lecture_details/lecture_details.dart';
@@ -12,6 +13,7 @@ class LectureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    Course course = Provider.of<Course>(context);
     return Padding(
       padding: EdgeInsets.only(top: 0.0),
       child: Card(
@@ -30,7 +32,8 @@ class LectureTile extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => MultiProvider(
                             providers: [Provider.value(value: user)],
-                            child: LectureDetails(lecture: lecture),
+                            child: LectureDetails(
+                                lecture: lecture, course: course),
                           )));
             },
           ),

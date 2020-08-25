@@ -44,9 +44,13 @@ class _CourseLectureDetailsState extends State<CourseLectureDetails> {
       }
     }
 
-    return StreamProvider<List<Lecture>>.value(
-      value: DatabaseService(uid: user.uid, courseID: widget.course.id)
-          .getLectures(user.isStudent, widget.course.instructorUID),
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Lecture>>.value(
+            value: DatabaseService(uid: user.uid, courseID: widget.course.id)
+                .getLectures(user.isStudent, widget.course.instructorUID)),
+        Provider<Course>.value(value: widget.course)
+      ],
       child: Scaffold(
         drawer: appDrawer(user),
         appBar: AppBar(

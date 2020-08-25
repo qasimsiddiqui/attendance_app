@@ -494,6 +494,35 @@ class DatabaseService {
       yield studentList;
     }
   }
+
+  Stream<List<Student>> getLecturePresentStudents(
+      Course course, Lecture lecture) async* {
+    List<Student> studentList = new List();
+
+    QuerySnapshot presentStudentsQuery = await _instructorCollection
+        .document(course.instructorUID)
+        .collection('courses')
+        .document(course.id)
+        .collection('lectures')
+        .document(lecture.lectureName)
+        .collection('present_students')
+        .getDocuments();
+
+    if (presentStudentsQuery.documents.length == 0) {
+      return; //TODO add appropriate return type
+    } else {
+      for (DocumentSnapshot doc in presentStudentsQuery.documents) {
+        DocumentSnapshot studentDoc =
+            await _studentCollection.document(doc.documentID).get();
+
+        Student _student = new Student.fromSnapshotWithTimeStamp(
+            studentDoc, doc['attendanceTime']);
+        studentList.add(_student);
+        print(_student.toString());
+      }
+      yield studentList;
+    }
+  }
 }
 
 // Course IDs:

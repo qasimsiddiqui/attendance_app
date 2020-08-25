@@ -1,13 +1,16 @@
+import 'package:attendance_app/models/course.dart';
 import 'package:attendance_app/models/lecture.dart';
+import 'package:attendance_app/screens/show_present_students/show_present_students.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/user.dart';
 import 'package:provider/provider.dart';
 
 class LectureDetails extends StatelessWidget {
-  LectureDetails({this.lecture});
+  LectureDetails({this.lecture, this.course});
 
   final Lecture lecture;
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class LectureDetails extends StatelessWidget {
               Text(
                 "noOfPresentStudents : ${lecture.noOfPresentStudents}\n\n" +
                     "creditHours : ${lecture.creditHours}\n\n" +
-                    "dateTime : ${lecture.dateTime}\n\n" +
+                    "dateTime : ${lecture.dateTime.toDate()}\n\n" +
                     "averageAttendance : ${lecture.averageAttendance}%\n\n" +
                     "attendanceCode : ${lecture.attendanceCode}\n\n",
                 style: TextStyle(
@@ -37,6 +40,26 @@ class LectureDetails extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.w400),
               ),
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RaisedButton(
+                      child: Text('Show Present Students'),
+                      color: Colors.blue,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => ShowPresentStudents(
+                                      course: course,
+                                      lecture: lecture,
+                                    )));
+                      }),
+                ],
+              )
             ],
           ),
         ),

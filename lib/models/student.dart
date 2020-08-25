@@ -7,6 +7,7 @@ class Student {
   final String number;
   final String regNo;
   int noOfAttendedLectures;
+  Timestamp attendanceTime;
   List<CourseIDAndInstructorID> courses;
 
   Student({this.name, this.email, this.number, this.regNo});
@@ -17,6 +18,17 @@ class Student {
         number = snapshot['number'],
         regNo = snapshot['registration_No'],
         noOfAttendedLectures = noOfAL,
+        courses = snapshot['courses'].map<CourseIDAndInstructorID>((course) {
+          return CourseIDAndInstructorID.fromMap(course);
+        }).toList();
+
+  Student.fromSnapshotWithTimeStamp(
+      DocumentSnapshot snapshot, Timestamp timestamp)
+      : name = snapshot['name'],
+        email = snapshot['email'],
+        number = snapshot['number'],
+        regNo = snapshot['registration_No'],
+        attendanceTime = timestamp,
         courses = snapshot['courses'].map<CourseIDAndInstructorID>((course) {
           return CourseIDAndInstructorID.fromMap(course);
         }).toList();
