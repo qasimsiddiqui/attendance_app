@@ -43,7 +43,9 @@ class LectureTile extends StatelessWidget {
               lineWidth: 5.0,
               percent: double.parse(lecture.averageAttendance) / 100,
               center: new Text(_percentageAttendance()),
-              progressColor: Colors.green,
+              progressColor: double.parse(lecture.averageAttendance) < 50
+                  ? Colors.amber
+                  : Colors.green,
             ),
             title: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
