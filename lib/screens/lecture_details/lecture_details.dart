@@ -4,6 +4,7 @@ import 'package:attendance_app/screens/show_present_students/show_present_studen
 import 'package:attendance_app/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/user.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class LectureDetails extends StatelessWidget {
@@ -14,12 +15,10 @@ class LectureDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
-
+    UserData user = Provider.of<UserData>(context);
     return Scaffold(
-      drawer: appDrawer(user),
       appBar: AppBar(
-        title: Text('Lecture Details'),
+        title: Text('${lecture.lectureName} Details'),
         centerTitle: true,
       ),
       body: Padding(
@@ -29,26 +28,38 @@ class LectureDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 15),
-              Text(
-                "noOfPresentStudents : ${lecture.noOfPresentStudents}\n\n" +
-                    "creditHours : ${lecture.creditHours}\n\n" +
-                    "dateTime : ${lecture.dateTime.toDate()}\n\n" +
-                    "averageAttendance : ${lecture.averageAttendance}%\n\n" +
-                    "attendanceCode : ${lecture.attendanceCode}\n\n",
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400),
-              ),
+              detailBox("Number Of Present Students: ",
+                  lecture.noOfPresentStudents.toString()),
+              SizedBox(height: 5),
+              detailBox("Credit Hours: ", lecture.creditHours.toString()),
+              SizedBox(height: 5),
+              detailBox(
+                  "Date & Time :",
+                  DateFormat.yMMMd()
+                      .add_jm()
+                      .format(lecture.dateTime.toDate())),
+              SizedBox(height: 5),
+              detailBox(
+                  "Average Attendance :", lecture.averageAttendance + " %"),
+              SizedBox(height: 5),
+              user.isStudent
+                  ? Container()
+                  : detailBox("Attendance Code: ", lecture.attendanceCode),
               SizedBox(
                 height: 25,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RaisedButton(
-                      child: Text('Show Present Students'),
-                      color: Colors.blue,
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                      ),
+                      child: Text('Show Present Students',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17)),
                       onPressed: () {
                         Navigator.push(
                             context,

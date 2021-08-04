@@ -1,8 +1,8 @@
 import 'package:attendance_app/services/auth.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/registration_fields.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class InstructorRegisterPage extends StatefulWidget {
   @override
@@ -75,8 +75,7 @@ class _InstructorRegisterPageState extends State<InstructorRegisterPage> {
                           setState(() => _password = val);
                         }),
                     SizedBox(height: 10),
-                    RaisedButton(
-                        color: Colors.purple,
+                    ElevatedButton(
                         child: Text('Register',
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
@@ -90,24 +89,11 @@ class _InstructorRegisterPageState extends State<InstructorRegisterPage> {
                               });
                             } else {
                               Navigator.pop(context);
-                              Flushbar(
-                                margin: EdgeInsets.all(10),
-                                borderRadius: 8,
-                                message: "Sucessfully Registered",
-                                duration: Duration(seconds: 3),
-                                backgroundGradient: LinearGradient(colors: [
-                                  Colors.green[300],
-                                  Colors.green[400]
-                                ]),
-                                backgroundColor: Colors.red,
-                                boxShadows: [
-                                  BoxShadow(
-                                    color: Colors.green[800],
-                                    offset: Offset(0.0, 2.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              )..show(context);
+                              Fluttertoast.showToast(
+                                msg: "Sucessfully Registered",
+                                backgroundColor: Colors.green,
+                                toastLength: Toast.LENGTH_LONG,
+                              );
                             }
                           }
                         }),

@@ -19,17 +19,18 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final userUID = Provider.of<UserUID>(context);
-    final user = Provider.of<User>(context);
+    final user = Provider.of<UserData>(context);
 
     // print(userUID.uid);
 
     return StreamProvider<List<Course>>.value(
         value: DatabaseService(uid: userUID.uid).getCourses(user.isStudent),
+        initialData: [],
         child: Scaffold(
           appBar: AppBar(
             title: Text('Home'),
             actions: <Widget>[
-              FlatButton.icon(
+              TextButton.icon(
                 icon: Icon(
                   Icons.person,
                   color: Colors.white,
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
               Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Provider<User>.value(
+                          builder: (context) => Provider<UserData>.value(
                               value: user, child: AddCourse())))
                   .then((value) => setState(() {}));
             },

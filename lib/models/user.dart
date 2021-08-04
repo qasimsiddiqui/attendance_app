@@ -7,23 +7,23 @@ class UserUID {
   UserUID({this.uid, this.isSignedIn});
 }
 
-class User {
+class UserData {
   String uid;
   String name;
   String email;
   String number;
   bool isStudent;
 
-  User({this.name, this.email, this.number, this.isStudent, this.uid});
+  UserData({this.name, this.email, this.number, this.isStudent, this.uid});
 
-  User.initialData(String userID)
+  UserData.initialData(String userID)
       : uid = userID,
         name = "",
         email = "",
         number = "",
         isStudent = false;
 
-  User.fromSnapshot(DocumentSnapshot snapshot, bool isStd, String userUID)
+  UserData.fromSnapshot(DocumentSnapshot snapshot, bool isStd, String userUID)
       : name = snapshot['name'],
         uid = userUID,
         email = snapshot['email'],

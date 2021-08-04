@@ -1,12 +1,14 @@
 import 'package:attendance_app/models/user.dart';
 import 'package:attendance_app/screens/wrapper.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:attendance_app/services/auth.dart';
 
-void main() {
-  //Provider.debugCheckInvalidValueType = null;
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(MultiProvider(providers: [
     // StreamProvider is created here which manages the Auth of the user if the
     // auth status changes the value is sent down the widget tree from here
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.cyan[700],
+        scaffoldBackgroundColor: Colors.cyan[800],
       ),
       debugShowCheckedModeBanner: true,
       home: Wrapper(),

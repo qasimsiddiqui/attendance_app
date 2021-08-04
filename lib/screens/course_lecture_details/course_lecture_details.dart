@@ -24,7 +24,7 @@ class CourseLectureDetails extends StatefulWidget {
 class _CourseLectureDetailsState extends State<CourseLectureDetails> {
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
+    UserData user = Provider.of<UserData>(context);
 
     void _selectedOption(OptionSelected option) {
       if (option == OptionSelected.showCourseDetails) {
@@ -47,14 +47,14 @@ class _CourseLectureDetailsState extends State<CourseLectureDetails> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Lecture>>.value(
+            initialData: [],
             value: DatabaseService(uid: user.uid, courseID: widget.course.id)
                 .getLectures(user.isStudent, widget.course.instructorUID)),
         Provider<Course>.value(value: widget.course)
       ],
       child: Scaffold(
-        drawer: appDrawer(user),
         appBar: AppBar(
-          title: Text('Lectures'),
+          title: Text('${widget.course.name} Lectures'),
           centerTitle: true,
           actions: [
             PopupMenuButton(
@@ -84,7 +84,7 @@ class _CourseLectureDetailsState extends State<CourseLectureDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MultiProvider(providers: [
-                          Provider<User>.value(
+                          Provider<UserData>.value(
                             value: user,
                           ),
                           Provider<Course>.value(value: widget.course)

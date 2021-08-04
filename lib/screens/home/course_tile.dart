@@ -11,7 +11,7 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
+    UserData user = Provider.of<UserData>(context);
     print(course.toString());
 
     return Card(

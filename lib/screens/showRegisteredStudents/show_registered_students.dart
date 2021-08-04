@@ -9,7 +9,7 @@ class ShowRegisteredStudents extends StatelessWidget {
   ShowRegisteredStudents({this.course});
 
   final Course course;
-  List<double> attendancePercent = [];
+  final List<double> attendancePercent = [];
   String _percentageAttendance(int index) {
     if (attendancePercent[index] == 1.00) {
       return (attendancePercent[index] * 100).toString().substring(0, 3);
@@ -67,6 +67,8 @@ class ShowRegisteredStudents extends StatelessWidget {
                     );
                   }),
             );
+          } else {
+            return Text('Error');
           }
         });
   }

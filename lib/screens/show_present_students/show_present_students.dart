@@ -3,8 +3,8 @@ import 'package:attendance_app/models/lecture.dart';
 import 'package:attendance_app/models/student.dart';
 import 'package:attendance_app/services/database.dart';
 import 'package:attendance_app/shared/loading.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ShowPresentStudents extends StatelessWidget {
   const ShowPresentStudents({this.course, this.lecture});
@@ -36,12 +36,14 @@ class ShowPresentStudents extends StatelessWidget {
                           title: Text(
                               '${snapshot.data[index].name} (${snapshot.data[index].regNo})'),
                           subtitle: Text(
-                              '${snapshot.data[index].attendanceTime.toDate()}'),
+                              '${DateFormat.yMMMd().add_jm().format(snapshot.data[index].attendanceTime.toDate())}'),
                         ),
                       ),
                     );
                   }),
             );
+          } else {
+            return Text('Error');
           }
         });
   }

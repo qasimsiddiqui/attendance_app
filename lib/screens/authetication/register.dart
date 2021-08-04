@@ -44,7 +44,8 @@ class _RegisterState extends State<Register> {
                           ),
                           Text(
                             'Student',
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
                           )
                         ],
                       ),
@@ -72,7 +73,11 @@ class _RegisterState extends State<Register> {
                             'assets/images/business_user.png',
                             width: MediaQuery.of(context).size.width / 3,
                           ),
-                          Text('Instructor')
+                          Text(
+                            'Instructor',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                          )
                         ],
                       ),
                     ),
@@ -87,21 +92,19 @@ class _RegisterState extends State<Register> {
                 ],
               ),
               SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Already Registered?'),
-                  FlatButton(
-                      onPressed: () {
-                        widget.toggleView();
-                      },
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(
-                            color: Colors.white, fontStyle: FontStyle.italic),
-                      ))
-                ],
-              )
+              Text(
+                'Already Registered?',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
+              TextButton(
+                  onPressed: () {
+                    widget.toggleView();
+                  },
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ))
             ],
           ),
         ),

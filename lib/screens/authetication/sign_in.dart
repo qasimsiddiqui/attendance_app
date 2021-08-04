@@ -1,11 +1,11 @@
 import 'package:attendance_app/services/auth.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/shared/constants.dart';
 import 'package:attendance_app/shared/registration_fields.dart';
 import 'package:attendance_app/shared/loading.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -43,17 +43,18 @@ class _SignInState extends State<SignIn> {
                             SizedBox(height: 50),
                             Text.rich(TextSpan(
                                 text: 'Attendance Management System',
-                                style: Theme.of(context).textTheme.headline4
-                                //  TextStyle(
-                                //     fontWeight: FontWeight.bold,
-                                //     fontSize: 30,
-                                //     color: Colors.white)
-                                )),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .copyWith(color: Colors.white))),
                             SizedBox(height: 30),
                             TextFormField(
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: textInputDecoration.copyWith(
-                                    hintText: 'Email'),
+                                    hintText: 'Email',
+                                    errorStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
                                 validator: validateEmail,
                                 onChanged: (val) {
                                   setState(() => email = val);
@@ -62,7 +63,10 @@ class _SignInState extends State<SignIn> {
                             TextFormField(
                                 keyboardType: TextInputType.visiblePassword,
                                 decoration: textInputDecoration.copyWith(
-                                    hintText: 'Password'),
+                                    hintText: 'Password',
+                                    errorStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
                                 validator: (val) => val.length < 6
                                     ? 'Enter a password 6+ characters long'
                                     : null,
@@ -71,16 +75,19 @@ class _SignInState extends State<SignIn> {
                                   setState(() => password = val);
                                 }),
                             SizedBox(height: 20),
-                            RaisedButton(
-                                elevation: 8,
-                                padding: EdgeInsets.fromLTRB(35, 15, 35, 15),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                color: Colors.cyan,
-                                child: Text('Sign In',
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 8,
+                                  padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  primary: Colors.cyan,
+                                ),
+                                child: Text('Login',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20)),
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     setState(() => loading = true);
@@ -93,25 +100,11 @@ class _SignInState extends State<SignIn> {
                                         loading = false;
                                       });
                                     } else {
-                                      Flushbar(
-                                        margin: EdgeInsets.all(10),
-                                        borderRadius: 8,
-                                        message: "Sign In Sucessful",
-                                        duration: Duration(seconds: 3),
-                                        backgroundGradient: LinearGradient(
-                                            colors: [
-                                              Colors.green[300],
-                                              Colors.green[400]
-                                            ]),
-                                        backgroundColor: Colors.red,
-                                        boxShadows: [
-                                          BoxShadow(
-                                            color: Colors.green[800],
-                                            offset: Offset(0.0, 2.0),
-                                            blurRadius: 3.0,
-                                          )
-                                        ],
-                                      )..show(context);
+                                      Fluttertoast.showToast(
+                                        msg: "Sign In Sucessful",
+                                        backgroundColor: Colors.green,
+                                        toastLength: Toast.LENGTH_LONG,
+                                      );
                                     }
                                   }
                                 }),

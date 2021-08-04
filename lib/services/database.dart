@@ -14,13 +14,13 @@ class DatabaseService {
 
   //collection reference
   final CollectionReference _instructorCollection =
-      Firestore.instance.collection('instructors');
+      FirebaseFirestore.instance.collection('instructors');
 
   final CollectionReference _studentCollection =
-      Firestore.instance.collection('students');
+      FirebaseFirestore.instance.collection('students');
 
   // bool determineUser(UserUID userUID) {
-  //   Future<bool> instruct = _instructorCollection.document(uid).get().then((doc){
+  //   Future<bool> instruct = _instructorCollection.doc(uid).get().then((doc){
   //     if(doc.exists){
   //       return true;
   //     }
@@ -36,7 +36,7 @@ class DatabaseService {
   // Future<bool> determineUser(User user) async {
   //   bool isStudent = false;
   //   try {
-  //     await _instructorCollection.document(uid).get().then((doc) {
+  //     await _instructorCollection.doc(uid).get().then((doc) {
   //       if (doc.exists)
   //         isStudent = false;
   //       else
@@ -47,7 +47,7 @@ class DatabaseService {
   //     return null;
   //   }
 
-  //   user = await _instructorCollection.document(uid).get().then((doc) {
+  //   user = await _instructorCollection.doc(uid).get().then((doc) {
   //     User r;
   //     if (doc.exists) {
   //       r = new User(
@@ -57,7 +57,7 @@ class DatabaseService {
   //           number: doc.data['number'],
   //           isStudent: false);
   //     } else {
-  //       _studentCollection.document(uid).get().then((doc) {
+  //       _studentCollection.doc(uid).get().then((doc) {
   //         if (doc.exists) {
   //           user = new User(
   //               name: doc.data['name'],
@@ -77,27 +77,28 @@ class DatabaseService {
   //     .map((DocumentSnapshot snapshot) {
   //   return User.fromSnapshot(snapshot, false);
   // });
-  Future<User> get getUserData async {
-    User user;
+  Future<UserData> get getUserData async {
+    UserData user;
     try {
       DocumentSnapshot instructorSnapshot =
-          await _instructorCollection.document(uid).get();
+          await _instructorCollection.doc(uid).get();
 
       if (instructorSnapshot.exists) {
-        user = new User.fromSnapshot(instructorSnapshot, false, uid);
+        user = new UserData.fromSnapshot(instructorSnapshot, false, uid);
       } else {
         DocumentSnapshot studentSnapshot =
-            await _studentCollection.document(uid).get();
+            await _studentCollection.doc(uid).get();
 
         if (studentSnapshot.exists) {
-          user = new User.fromSnapshot(studentSnapshot, true, uid);
+          user = new UserData.fromSnapshot(studentSnapshot, true, uid);
         } else {
-          user = new User.initialData(uid);
+          user = new UserData.initialData(uid);
         }
       }
       return user;
     } catch (e) {
       print(e.toString());
+      return null;
     }
   }
 
@@ -109,7 +110,7 @@ class DatabaseService {
   ///////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
-  /// TODO complete Student mathods
+  // TODO complete Student mathods
 
   Future addStudentCourse(String courseID) async {
     // String code = await addStudentCourseData(name, id, session);
@@ -117,11 +118,10 @@ class DatabaseService {
     //query the course ID in instructors collection to check if course exists
     QuerySnapshot courseExist = await _instructorCollection
         .where("courses", arrayContains: courseID)
-        .getDocuments();
+        .get();
 
     //ID of Instructor whose course it is
-    List<String> instructorUID =
-        courseExist.documents.map((e) => e.documentID).toList();
+    List<String> instructorUID = courseExist.docs.map((e) => e.id).toList();
 
     //checks to see if only one course is found
     if (instructorUID.isEmpty) {
@@ -130,28 +130,28 @@ class DatabaseService {
       return "More than one courses found";
     } else {
       await _instructorCollection
-          .document(instructorUID[0])
+          .doc(instructorUID[0])
           .collection('courses')
-          .document(courseID)
+          .doc(courseID)
           .collection('registered_students')
-          .document(uid)
-          .setData({'no_of_attended_lec': 0});
+          .doc(uid)
+          .set({'no_of_attended_lec': 0});
 
       DocumentSnapshot _courseDocument = await _instructorCollection
-          .document(instructorUID[0])
+          .doc(instructorUID[0])
           .collection('courses')
-          .document(courseID)
+          .doc(courseID)
           .get();
 
       await _instructorCollection
-          .document(instructorUID[0])
+          .doc(instructorUID[0])
           .collection('courses')
-          .document(courseID)
-          .updateData({
+          .doc(courseID)
+          .update({
         'no_of_students': "${int.parse(_courseDocument['no_of_students']) + 1}"
       });
 
-      await _studentCollection.document(uid).updateData({
+      await _studentCollection.doc(uid).update({
         'courses': FieldValue.arrayUnion([
           {'instructor_uid': instructorUID[0], 'course_id': courseID}
         ])
@@ -161,7 +161,7 @@ class DatabaseService {
 
   Future updateStudentData(
       String name, String regNo, String number, String email) async {
-    return await _studentCollection.document(uid).setData({
+    return await _studentCollection.doc(uid).set({
       'registration_No': regNo,
       'name': name,
       'number': number,
@@ -172,12 +172,12 @@ class DatabaseService {
 
   //student list from snapshot
   List<Student> _studentListFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.documents.map((doc) {
+    return querySnapshot.docs.map((doc) {
       return Student(
-          email: doc.data['email'] ?? '',
-          name: doc.data['name'] ?? '',
-          regNo: doc.data['registration No'] ?? '',
-          number: doc.data['number'] ?? '');
+          email: doc['email'] ?? '',
+          name: doc['name'] ?? '',
+          regNo: doc['registration No'] ?? '',
+          number: doc['number'] ?? '');
     }).toList();
   }
 
@@ -196,7 +196,7 @@ class DatabaseService {
 
   Stream<Instructor> get instructorData {
     return _instructorCollection
-        .document(uid)
+        .doc(uid)
         .snapshots()
         .map((DocumentSnapshot snapshot) {
       return Instructor.fromSnapshot(snapshot);
@@ -204,8 +204,9 @@ class DatabaseService {
   }
 
   Future updateInstructorData(String name, String number, String email) async {
-    return await _instructorCollection.document(uid).setData(
-        {'name': name, 'number': number, 'email': email, 'courses': []});
+    return await _instructorCollection
+        .doc(uid)
+        .set({'name': name, 'number': number, 'email': email, 'courses': []});
   }
 
   Future addInstructorCourse(String name, String courseCode, String session,
@@ -214,8 +215,8 @@ class DatabaseService {
         await addInstructorCourseData(name, courseCode, session, creditHours);
 
     return await _instructorCollection
-        .document(uid)
-        .updateData({
+        .doc(uid)
+        .update({
           'courses': FieldValue.arrayUnion([id])
         })
         .then((doc) {
@@ -230,7 +231,7 @@ class DatabaseService {
 
   //Instructor list from snapshot
   List<Instructor> _instructorListFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.documents.map((snapshot) {
+    return querySnapshot.docs.map((snapshot) {
       return Instructor.fromSnapshot(snapshot);
       // return Instructor(
       //     email: doc.data['email'] ?? '',
@@ -254,17 +255,9 @@ class DatabaseService {
 
   Future addInstructorCourseData(String name, String courseCode, String session,
       String creditHours) async {
-    String id = _instructorCollection
-        .document(uid)
-        .collection('courses')
-        .document()
-        .documentID;
+    String id = _instructorCollection.doc(uid).collection('courses').doc().id;
 
-    await _instructorCollection
-        .document(uid)
-        .collection('courses')
-        .document(id)
-        .setData({
+    await _instructorCollection.doc(uid).collection('courses').doc(id).set({
       'name': name,
       'course_code': courseCode,
       'session': session,
@@ -281,15 +274,15 @@ class DatabaseService {
 
   //Course list from snapshot
   List<Course> _courseListFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.documents.map((doc) {
+    return querySnapshot.docs.map((doc) {
       return Course.fromSnapshot(doc);
     }).toList();
   }
 
   Stream<List<Course>> _getStudentCourses() async* {
-    List<Course> courseList = new List();
+    List<Course> courseList = [];
 
-    DocumentSnapshot stdDoc = await _studentCollection.document(uid).get();
+    DocumentSnapshot stdDoc = await _studentCollection.doc(uid).get();
     Student _student = new Student.fromSnapshot(stdDoc, 0);
 
     if (_student.courses.length == 0) {
@@ -298,9 +291,9 @@ class DatabaseService {
       int len = _student.courses.length - 1;
       while (len >= 0) {
         DocumentSnapshot snapshot = await _instructorCollection
-            .document(_student.courses[len].instructorUID)
+            .doc(_student.courses[len].instructorUID)
             .collection('courses')
-            .document(_student.courses[len].courseID)
+            .doc(_student.courses[len].courseID)
             .get();
         //print(snapshot.data);
         Course course = new Course.fromSnapshot(snapshot);
@@ -315,7 +308,7 @@ class DatabaseService {
 
   Stream<List<Course>> _getInstructorCourses() {
     return _instructorCollection
-        .document(uid)
+        .doc(uid)
         .collection('courses')
         .snapshots()
         .map(_courseListFromSnapshot);
@@ -332,16 +325,16 @@ class DatabaseService {
 
   //Course list from snapshot
   List<Lecture> _lectureListFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.documents.map((DocumentSnapshot snapshot) {
+    return querySnapshot.docs.map((DocumentSnapshot snapshot) {
       return Lecture.fromSnapshot(snapshot);
     }).toList();
   }
 
   Stream<List<Lecture>> _getStudentLectures(String instructorUID) {
     return _instructorCollection
-        .document(instructorUID)
+        .doc(instructorUID)
         .collection('courses')
-        .document(courseID)
+        .doc(courseID)
         .collection('lectures')
         .snapshots()
         .map(_lectureListFromSnapshot);
@@ -349,9 +342,9 @@ class DatabaseService {
 
   Stream<List<Lecture>> _getInstructorLectures() {
     return _instructorCollection
-        .document(uid)
+        .doc(uid)
         .collection('courses')
-        .document(courseID)
+        .doc(courseID)
         .collection('lectures')
         .snapshots()
         .map(_lectureListFromSnapshot);
@@ -372,12 +365,12 @@ class DatabaseService {
         "${int.parse(course.creditHoursDone) + lecture.creditHours}";
     lecture.lectureName = "Lecture $nextLectureNumber";
     await _instructorCollection
-        .document(uid)
+        .doc(uid)
         .collection('courses')
-        .document(courseID)
+        .doc(courseID)
         .collection('lectures')
-        .document(lecture.lectureName)
-        .setData({
+        .doc(lecture.lectureName)
+        .set({
       'lectureName': lecture.lectureName,
       'noOfPresentStudents': lecture.noOfPresentStudents,
       'creditHours': lecture.creditHours,
@@ -386,10 +379,10 @@ class DatabaseService {
       'attendanceCode': lecture.attendanceCode
     });
     await _instructorCollection
-        .document(uid)
+        .doc(uid)
         .collection('courses')
-        .document(courseID)
-        .updateData({
+        .doc(courseID)
+        .update({
       'no_of_lectures': nextLectureNumber,
       'credit_hours_done': creditHoursDone
     });
@@ -399,17 +392,17 @@ class DatabaseService {
       Course course, String attendanceCode) async {
     print(attendanceCode);
     QuerySnapshot queryResult = await _instructorCollection
-        .document(course.instructorUID)
+        .doc(course.instructorUID)
         .collection('courses')
-        .document(courseID)
+        .doc(courseID)
         .collection('lectures')
         .where('attendanceCode', isEqualTo: attendanceCode)
-        .getDocuments();
+        .get();
 
     //get a list of all lectures that have this attendanceCode.
     //only one should be return, this is done just in case
     List<Lecture> lecturesList =
-        queryResult.documents.map((e) => Lecture.fromSnapshot(e)).toList();
+        queryResult.docs.map((e) => Lecture.fromSnapshot(e)).toList();
     for (var lecture in lecturesList) {
       print(lecture.toString());
     }
@@ -420,33 +413,33 @@ class DatabaseService {
       return "More than one lectures found";
     } else {
       DocumentSnapshot studentAlreadyExists = await _instructorCollection
-          .document(course.instructorUID)
+          .doc(course.instructorUID)
           .collection('courses')
-          .document(courseID)
+          .doc(courseID)
           .collection('lectures')
-          .document(lecturesList[0].lectureName)
+          .doc(lecturesList[0].lectureName)
           .collection('present_students')
-          .document(uid)
+          .doc(uid)
           .get();
 
       if (!studentAlreadyExists.exists) {
         await _instructorCollection
-            .document(course.instructorUID)
+            .doc(course.instructorUID)
             .collection('courses')
-            .document(courseID)
+            .doc(courseID)
             .collection('lectures')
-            .document(lecturesList[0].lectureName)
+            .doc(lecturesList[0].lectureName)
             .collection('present_students')
-            .document(uid)
-            .setData({'attendanceTime': Timestamp.now()});
+            .doc(uid)
+            .set({'attendanceTime': Timestamp.now()});
 
         await _instructorCollection
-            .document(course.instructorUID)
+            .doc(course.instructorUID)
             .collection('courses')
-            .document(courseID)
+            .doc(courseID)
             .collection('registered_students')
-            .document(uid)
-            .updateData({'no_of_attended_lec': FieldValue.increment(1)});
+            .doc(uid)
+            .update({'no_of_attended_lec': FieldValue.increment(1)});
       } else {
         return "Attendance Already Marked";
       }
@@ -458,33 +451,33 @@ class DatabaseService {
         (noOfPresentStudents.toDouble() / noOfStudents.toDouble()) * 100;
     String avgAttendanceString = '${avgAttendance.toStringAsFixed(2)}';
     await _instructorCollection
-        .document(course.instructorUID)
+        .doc(course.instructorUID)
         .collection('courses')
-        .document(courseID)
+        .doc(courseID)
         .collection('lectures')
-        .document(lecturesList[0].lectureName)
-        .setData({
+        .doc(lecturesList[0].lectureName)
+        .set({
       'noOfPresentStudents': noOfPresentStudents,
       'averageAttendance': avgAttendanceString,
-    }, merge: true);
+    }, SetOptions(merge: true));
   }
 
   Stream<List<Student>> getCourseRegisteredStudents(Course course) async* {
-    List<Student> studentList = new List();
+    List<Student> studentList = [];
 
     QuerySnapshot regStudentsQuery = await _instructorCollection
-        .document(course.instructorUID)
+        .doc(course.instructorUID)
         .collection('courses')
-        .document(course.id)
+        .doc(course.id)
         .collection('registered_students')
-        .getDocuments();
+        .get();
 
-    if (regStudentsQuery.documents.length == 0) {
+    if (regStudentsQuery.docs.length == 0) {
       return; //TODO add appropriate return type
     } else {
-      for (DocumentSnapshot doc in regStudentsQuery.documents) {
+      for (DocumentSnapshot doc in regStudentsQuery.docs) {
         DocumentSnapshot studentDoc =
-            await _studentCollection.document(doc.documentID).get();
+            await _studentCollection.doc(doc.id).get();
 
         Student _student =
             new Student.fromSnapshot(studentDoc, doc['no_of_attended_lec']);
@@ -497,23 +490,23 @@ class DatabaseService {
 
   Stream<List<Student>> getLecturePresentStudents(
       Course course, Lecture lecture) async* {
-    List<Student> studentList = new List();
+    List<Student> studentList = [];
 
     QuerySnapshot presentStudentsQuery = await _instructorCollection
-        .document(course.instructorUID)
+        .doc(course.instructorUID)
         .collection('courses')
-        .document(course.id)
+        .doc(course.id)
         .collection('lectures')
-        .document(lecture.lectureName)
+        .doc(lecture.lectureName)
         .collection('present_students')
-        .getDocuments();
+        .get();
 
-    if (presentStudentsQuery.documents.length == 0) {
+    if (presentStudentsQuery.docs.length == 0) {
       return; //TODO add appropriate return type
     } else {
-      for (DocumentSnapshot doc in presentStudentsQuery.documents) {
+      for (DocumentSnapshot doc in presentStudentsQuery.docs) {
         DocumentSnapshot studentDoc =
-            await _studentCollection.document(doc.documentID).get();
+            await _studentCollection.doc(doc.id).get();
 
         Student _student = new Student.fromSnapshotWithTimeStamp(
             studentDoc, doc['attendanceTime']);

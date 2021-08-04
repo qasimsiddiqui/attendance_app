@@ -8,7 +8,7 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   //create user object based on a firebase user
-  UserUID _userFromFirebaseUser(FirebaseUser user) {
+  UserUID _userFromFirebaseUser(User user) {
     if (user != null)
       return UserUID(uid: user.uid, isSignedIn: true);
     else
@@ -30,7 +30,7 @@ class AuthService {
 
   //auth change user stream
   Stream<UserUID> get userChangeStream {
-    return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
     //.map( (FirebaseUser user) => _userFromFirebaseUser(user) );
   }
 
@@ -40,18 +40,19 @@ class AuthService {
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
+    final User currentUser = _auth.currentUser;
     assert(user.uid == currentUser.uid);
 
     return 'signInWithGoogle succeeded: $user';
@@ -60,8 +61,8 @@ class AuthService {
   //sign in anonymously
   Future signInAnon() async {
     try {
-      AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
+      UserCredential result = await _auth.signInAnonymously();
+      User user = result.user;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -72,9 +73,9 @@ class AuthService {
   //sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
+      UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      FirebaseUser user = result.user;
+      User user = result.user;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -86,9 +87,9 @@ class AuthService {
   Future registerStudentWithEmailAndPassword(String name, String regNo,
       String number, String email, String password) async {
     try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      FirebaseUser user = result.user;
+      User user = result.user;
 
       //create a new document for the user with uid
       await DatabaseService(uid: user.uid)
@@ -105,9 +106,9 @@ class AuthService {
   Future registerInstructorWithEmailAndPassword(
       String name, String number, String email, String password) async {
     try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      FirebaseUser user = result.user;
+      User user = result.user;
 
       //create a new document for the user with uid
       await DatabaseService(uid: user.uid)

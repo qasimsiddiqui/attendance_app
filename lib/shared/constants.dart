@@ -17,22 +17,6 @@ const backgroundDecoration = BoxDecoration(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: [
-    //Dark Ocean
-    // Color.fromRGBO(55, 59, 68, 100),
-    // Color.fromRGBO(66, 134, 244, 100)
-
-    //Flare
-    // Color.fromRGBO(241, 39, 17, 100),
-    // Color.fromRGBO(245, 175, 25, 100)
-
-    //Azur Lane
-    // Color.fromRGBO(127, 127, 213, 100),
-    // Color.fromRGBO(134, 168, 231, 100),
-    // Color.fromRGBO(145, 234, 228, 100)
-    //Harvey
-    // Color.fromRGBO(31, 64, 55, 100),
-    // Color.fromRGBO(153, 242, 200, 100)
-    // Moonlit Astroid
     Color.fromRGBO(15, 32, 39, 100),
     Color.fromRGBO(32, 58, 67, 100),
     Color.fromRGBO(54, 93, 120, 100),
@@ -42,7 +26,7 @@ const backgroundDecoration = BoxDecoration(
   tileMode: TileMode.mirror,
 ));
 
-Drawer appDrawer(User user) {
+Drawer appDrawer(UserData user) {
   return Drawer(
       child: Column(
     children: <Widget>[
@@ -61,9 +45,34 @@ Drawer appDrawer(User user) {
         accountName: Text(user.name ?? ''),
         accountEmail: Text(user.email ?? ''),
       ),
-      ListTile(title: Text(user.uid ?? '')),
       ListTile(title: Text(user.isStudent ? 'Student' : 'Instructor')),
       ListTile(title: Text(user.number ?? ''))
     ],
   ));
+}
+
+String percentageAttendance(String avgAttendance) {
+  if (double.parse(avgAttendance) == 100.00) {
+    return avgAttendance.substring(0, 3);
+  } else if (double.parse(avgAttendance) < 10.00) {
+    return avgAttendance.substring(0, 1);
+  } else {
+    return avgAttendance.substring(0, 2);
+  }
+}
+
+Widget detailBox(String title, String detail) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+    child: Card(
+      child: ListTile(
+        title: Text(title),
+        trailing: Text(
+          detail,
+          style: TextStyle(
+              fontSize: 17, color: Colors.black, fontWeight: FontWeight.w600),
+        ),
+      ),
+    ),
+  );
 }

@@ -17,46 +17,15 @@ class CourseDetails extends StatelessWidget {
           child: Container(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(height: 20),
-              Text(
-                'Course Name: ${course.name}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Course Code: ${course.courseCode}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Session: ${course.session}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Registration Code: ${course.id}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Credit Hours: ${course.totalCreditHours}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Credit Hours Done: ${course.creditHoursDone}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'No of Lectures: ${course.noOfLectures}',
-                style: textStyling,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'No of Students: ${course.noOfStudents}',
-                style: textStyling,
-              )
+              SizedBox(height: 5),
+              detailBox('Course Name :', course.name),
+              detailBox('Course Code :', course.courseCode),
+              detailBox('Session :', course.session),
+              detailBox('Registration Code :', course.id),
+              detailBox('Credit Hours :', course.totalCreditHours),
+              detailBox('Credit Hours Done :', course.creditHoursDone),
+              detailBox('Number of Lectures :', course.noOfLectures),
+              detailBox("Number of Students :", course.noOfStudents),
             ]),
           ),
         ),
