@@ -55,6 +55,18 @@ To check proper installation:
 cmd> flutter doctor -v
 ```
 
+Create a firebase project with the package name `com.qasimsiddiqui.attendance_app`
+
+Or if you want your own package name edit the file `android/app/build.gradle` and add your own package name to applicationId 
+```
+defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.qasimsiddiqui.attendance_app"
+
+}
+```
+
+Add your `google-services.json` file to `android/app/`
 ### Run
 
 To run the project, simply run `pub get` and run project on any emulator using `flutter run`.
